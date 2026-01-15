@@ -1,6 +1,7 @@
 package coffeeshop.shared.data.repository
 
 import coffeeshop.shared.data.model.Banner
+import coffeeshop.shared.data.model.FavoriteDrink
 import coffeeshop.shared.data.model.FeaturedDrink
 import coffeeshop.shared.data.model.MenuCategory
 import coffeeshop.shared.data.model.MenuItem
@@ -9,6 +10,9 @@ import coffeeshop.shared.data.model.OrderItem
 import coffeeshop.shared.data.model.User
 
 class MockCoffeeRepository : CoffeeRepository {
+    
+    private val favoriteDrinks = mutableListOf<FavoriteDrink>()
+    
     override fun getCurrentUser(): User {
         return User(name = "Coffee Lover", id = "user_001")
     }
@@ -525,5 +529,23 @@ class MockCoffeeRepository : CoffeeRepository {
                 status = "Completed"
             )
         ).sortedByDescending { it.orderDate } // Most recent orders first
+    }
+    
+    override fun getFavoriteDrinks(): List<FavoriteDrink> {
+        return favoriteDrinks.toList()
+    }
+    
+    override fun addFavoriteDrink(drink: FavoriteDrink) {
+        if (!isFavorite(drink.id)) {
+            favoriteDrinks.add(drink)
+        }
+    }
+    
+    override fun removeFavoriteDrink(drinkId: String) {
+        favoriteDrinks.removeAll { it.id == drinkId }
+    }
+    
+    override fun isFavorite(drinkId: String): Boolean {
+        return favoriteDrinks.any { it.id == drinkId }
     }
 }
