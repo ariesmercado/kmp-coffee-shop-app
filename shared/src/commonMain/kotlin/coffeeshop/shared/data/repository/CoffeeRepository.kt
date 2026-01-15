@@ -6,6 +6,7 @@ import coffeeshop.shared.data.model.FeaturedDrink
 import coffeeshop.shared.data.model.MenuCategory
 import coffeeshop.shared.data.model.MenuItem
 import coffeeshop.shared.data.model.OrderHistory
+import coffeeshop.shared.data.model.RewardTransaction
 import coffeeshop.shared.data.model.User
 
 interface CoffeeRepository {
@@ -19,4 +20,8 @@ interface CoffeeRepository {
     fun addFavoriteDrink(drink: FavoriteDrink)
     fun removeFavoriteDrink(drinkId: String)
     fun isFavorite(drinkId: String): Boolean
+    fun getRewardPointsBalance(): Int
+    fun getRewardTransactions(): List<RewardTransaction>
+    fun addRewardPoints(points: Int, description: String)
+    fun redeemRewardPoints(points: Int, description: String): Boolean
 }

@@ -7,12 +7,16 @@ import coffeeshop.shared.data.model.MenuCategory
 import coffeeshop.shared.data.model.MenuItem
 import coffeeshop.shared.data.model.OrderHistory
 import coffeeshop.shared.data.model.OrderItem
+import coffeeshop.shared.data.model.RewardTransaction
+import coffeeshop.shared.data.model.RewardTransactionType
 import coffeeshop.shared.data.model.User
 
 class MockCoffeeRepository : CoffeeRepository {
     
     private val favoriteDrinks = mutableListOf<FavoriteDrink>()
     private val favoriteIds = mutableSetOf<String>()
+    private var rewardPointsBalance = 325 // Starting with some points for demo
+    private val rewardTransactions = mutableListOf<RewardTransaction>()
     
     init {
         // Add some sample favorite drinks for testing
@@ -44,10 +48,52 @@ class MockCoffeeRepository : CoffeeRepository {
         )
         favoriteDrinks.addAll(sampleFavorites)
         favoriteIds.addAll(sampleFavorites.map { it.id })
+        
+        // Add some sample reward transactions
+        val currentTime = System.currentTimeMillis()
+        val oneDayMs = 24 * 60 * 60 * 1000L
+        
+        rewardTransactions.addAll(listOf(
+            RewardTransaction(
+                id = "reward_1",
+                type = RewardTransactionType.EARNED,
+                points = 85,
+                timestamp = currentTime - (1 * oneDayMs),
+                details = "Purchase at Coffee Shop - $16.90"
+            ),
+            RewardTransaction(
+                id = "reward_2",
+                type = RewardTransactionType.EARNED,
+                points = 25,
+                timestamp = currentTime - (3 * oneDayMs),
+                details = "Purchase at Coffee Shop - $4.86"
+            ),
+            RewardTransaction(
+                id = "reward_3",
+                type = RewardTransactionType.REDEEMED,
+                points = -100,
+                timestamp = currentTime - (5 * oneDayMs),
+                details = "Redeemed for $5 discount"
+            ),
+            RewardTransaction(
+                id = "reward_4",
+                type = RewardTransactionType.EARNED,
+                points = 115,
+                timestamp = currentTime - (7 * oneDayMs),
+                details = "Purchase at Coffee Shop - $23.38"
+            ),
+            RewardTransaction(
+                id = "reward_5",
+                type = RewardTransactionType.EARNED,
+                points = 200,
+                timestamp = currentTime - (10 * oneDayMs),
+                details = "Welcome Bonus"
+            )
+        ))
     }
     
     override fun getCurrentUser(): User {
-        return User(name = "Coffee Lover", id = "user_001")
+        return User(name = "Coffee Lover", id = "user_001", rewardPoints = rewardPointsBalance)
     }
 
     override fun getBanners(): List<Banner> {
@@ -580,5 +626,43 @@ class MockCoffeeRepository : CoffeeRepository {
     
     override fun isFavorite(drinkId: String): Boolean {
         return favoriteIds.contains(drinkId)
+    }
+    
+    override fun getRewardPointsBalance(): Int {
+        return rewardPointsBalance
+    }
+    
+    override fun getRewardTransactions(): List<RewardTransaction> {
+        return rewardTransactions.sortedByDescending { it.timestamp }
+    }
+    
+    override fun addRewardPoints(points: Int, description: String) {
+        rewardPointsBalance += points
+        rewardTransactions.add(
+            RewardTransaction(
+                id = "reward_${System.currentTimeMillis()}",
+                type = RewardTransactionType.EARNED,
+                points = points,
+                timestamp = System.currentTimeMillis(),
+                details = description
+            )
+        )
+    }
+    
+    override fun redeemRewardPoints(points: Int, description: String): Boolean {
+        if (rewardPointsBalance < points) {
+            return false
+        }
+        rewardPointsBalance -= points
+        rewardTransactions.add(
+            RewardTransaction(
+                id = "reward_${System.currentTimeMillis()}",
+                type = RewardTransactionType.REDEEMED,
+                points = -points,
+                timestamp = System.currentTimeMillis(),
+                details = description
+            )
+        )
+        return true
     }
 }
