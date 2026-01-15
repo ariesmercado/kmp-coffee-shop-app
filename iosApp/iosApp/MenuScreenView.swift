@@ -24,7 +24,13 @@ struct MenuScreenView: View {
             )
             .padding(.vertical, 8)
             
-            MenuItemsList(menuItems: viewModel.filteredMenuItems)
+            MenuItemsList(
+                menuItems: viewModel.filteredMenuItems,
+                favoriteIds: viewModel.favoriteIds,
+                onToggleFavorite: { item in
+                    viewModel.toggleFavorite(item: item)
+                }
+            )
         }
         .background(CoffeeColors.creamyWhite)
         .edgesIgnoringSafeArea(.top)
@@ -122,6 +128,8 @@ struct CategoryChip: View {
 
 struct MenuItemsList: View {
     let menuItems: [MenuItem]
+    let favoriteIds: Set<String>
+    let onToggleFavorite: (MenuItem) -> Void
     
     var body: some View {
         if menuItems.isEmpty {
@@ -137,7 +145,13 @@ struct MenuItemsList: View {
             ScrollView {
                 VStack(spacing: 12) {
                     ForEach(menuItems, id: \.id) { item in
-                        MenuItemCardView(item: item)
+                        MenuItemCardView(
+                            item: item,
+                            isFavorite: favoriteIds.contains(item.id),
+                            onToggleFavorite: {
+                                onToggleFavorite(item)
+                            }
+                        )
                     }
                 }
                 .padding(.horizontal, 16)
@@ -149,6 +163,8 @@ struct MenuItemsList: View {
 
 struct MenuItemCardView: View {
     let item: MenuItem
+    let isFavorite: Bool
+    let onToggleFavorite: () -> Void
     
     var body: some View {
         HStack(spacing: 16) {
@@ -185,7 +201,14 @@ struct MenuItemCardView: View {
                 }
             }
             
-            Spacer()
+            // Favorite button
+            Button(action: onToggleFavorite) {
+                Image(systemName: isFavorite ? "heart.fill" : "heart")
+                    .resizable()
+                    .frame(width: 24, height: 24)
+                    .foregroundColor(isFavorite ? Color(red: 0.914, green: 0.118, blue: 0.388) : CoffeeColors.coffeeBrown.opacity(0.6))
+            }
+            .padding(.leading, 8)
         }
         .padding(16)
         .frame(height: 120)
@@ -200,13 +223,16 @@ class MenuViewModel: ObservableObject {
     @Published var selectedCategoryId: String? = nil
     @Published var categories: [MenuCategory] = []
     @Published var filteredMenuItems: [MenuItem] = []
+    @Published var favoriteIds: Set<String> = []
     
     private let presenter: MenuScreenPresenter
+    private let favoritesPresenter: FavoritesPresenter
     private var allMenuItems: [MenuItem] = []
     
     init() {
         let repository = MockCoffeeRepository()
         self.presenter = MenuScreenPresenter(repository: repository)
+        self.favoritesPresenter = FavoritesPresenter(repository: repository)
         loadData()
     }
     
@@ -214,6 +240,7 @@ class MenuViewModel: ObservableObject {
         categories = presenter.getCategories()
         allMenuItems = presenter.getMenuItems()
         updateFilteredItems()
+        updateFavoriteIds()
     }
     
     func toggleCategory(categoryId: String) {
@@ -235,6 +262,23 @@ class MenuViewModel: ObservableObject {
     func setSearchQuery(_ query: String) {
         searchQuery = query
         updateFilteredItems()
+    }
+    
+    func toggleFavorite(item: MenuItem) {
+        let favoriteDrink = FavoriteDrink(
+            id: item.id,
+            name: item.name,
+            description: item.description,
+            price: item.price,
+            imageUrl: item.imageUrl,
+            rating: item.rating
+        )
+        favoritesPresenter.toggleFavorite(drink: favoriteDrink)
+        updateFavoriteIds()
+    }
+    
+    func updateFavoriteIds() {
+        favoriteIds = Set(favoritesPresenter.getFavoriteDrinks().map { $0.id })
     }
 }
 
