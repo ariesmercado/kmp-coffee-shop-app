@@ -1,0 +1,18 @@
+# Kotlin
+*.class
+*.jar
+*.war
+*.ear
+*.so
+*.dylib
+*.pdb
+*.apk
+*.ap_
+*.dex
+*.apk
+*.kotlin_module
+
+# Gradle
+.gradle/
+build/
+out/
