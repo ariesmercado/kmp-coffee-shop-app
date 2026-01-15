@@ -278,7 +278,7 @@ class MenuViewModel: ObservableObject {
     }
     
     func updateFavoriteIds() {
-        favoriteIds = Set(favoritesPresenter.getFavoriteDrinks().map { $0.id })
+        favoriteIds = Set(favoritesPresenter.getFavoriteIds())
     }
 }
 

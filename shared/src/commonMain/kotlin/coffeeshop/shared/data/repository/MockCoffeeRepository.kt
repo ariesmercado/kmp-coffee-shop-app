@@ -569,10 +569,8 @@ class MockCoffeeRepository : CoffeeRepository {
     }
     
     override fun addFavoriteDrink(drink: FavoriteDrink) {
-        if (!favoriteIds.contains(drink.id)) {
-            favoriteDrinks.add(drink)
-            favoriteIds.add(drink.id)
-        }
+        favoriteDrinks.add(drink)
+        favoriteIds.add(drink.id)
     }
     
     override fun removeFavoriteDrink(drinkId: String) {

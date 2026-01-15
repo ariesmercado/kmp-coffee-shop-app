@@ -34,7 +34,7 @@ fun MenuScreen(
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var selectedCategoryId by remember { mutableStateOf<String?>(null) }
-    var favoriteIds by remember { mutableStateOf(favoritesPresenter.getFavoriteDrinks().map { it.id }.toSet()) }
+    var favoriteIds by remember { mutableStateOf(favoritesPresenter.getFavoriteIds()) }
     
     val categories = remember { presenter.getCategories() }
     val menuItems by remember(searchQuery, selectedCategoryId) {
@@ -80,7 +80,7 @@ fun MenuScreen(
                     rating = item.rating
                 )
                 favoritesPresenter.toggleFavorite(favoriteDrink)
-                favoriteIds = favoritesPresenter.getFavoriteDrinks().map { it.id }.toSet()
+                favoriteIds = favoritesPresenter.getFavoriteIds()
             }
         )
     }
