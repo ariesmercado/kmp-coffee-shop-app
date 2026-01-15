@@ -208,20 +208,12 @@ class MenuViewModel: ObservableObject {
         let repository = MockCoffeeRepository()
         self.presenter = MenuScreenPresenter(repository: repository)
         loadData()
-        
-        // Observe changes to searchQuery and selectedCategoryId
-        setupObservers()
     }
     
     private func loadData() {
         categories = presenter.getCategories()
         allMenuItems = presenter.getMenuItems()
         updateFilteredItems()
-    }
-    
-    private func setupObservers() {
-        // In SwiftUI, we'll use computed property or manual updates
-        // This is a placeholder for demonstration
     }
     
     func toggleCategory(categoryId: String) {
@@ -240,14 +232,6 @@ class MenuViewModel: ObservableObject {
         )
     }
     
-    // Call this when searchQuery changes
-    func onSearchQueryChanged() {
-        updateFilteredItems()
-    }
-}
-
-// Extension to handle search query changes
-extension MenuViewModel {
     func setSearchQuery(_ query: String) {
         searchQuery = query
         updateFilteredItems()
