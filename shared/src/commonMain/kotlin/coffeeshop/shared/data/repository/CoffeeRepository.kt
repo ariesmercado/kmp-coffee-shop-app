@@ -5,6 +5,7 @@ import coffeeshop.shared.data.model.FavoriteDrink
 import coffeeshop.shared.data.model.FeaturedDrink
 import coffeeshop.shared.data.model.MenuCategory
 import coffeeshop.shared.data.model.MenuItem
+import coffeeshop.shared.data.model.Notification
 import coffeeshop.shared.data.model.OrderHistory
 import coffeeshop.shared.data.model.RewardTransaction
 import coffeeshop.shared.data.model.User
@@ -24,4 +25,8 @@ interface CoffeeRepository {
     fun getRewardTransactions(): List<RewardTransaction>
     fun addRewardPoints(points: Int, description: String)
     fun redeemRewardPoints(points: Int, description: String): Boolean
+    fun getNotifications(): List<Notification>
+    fun clearNotification(notificationId: String)
+    fun clearAllNotifications()
+    fun markNotificationAsRead(notificationId: String)
 }
