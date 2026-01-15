@@ -13,6 +13,38 @@ class MockCoffeeRepository : CoffeeRepository {
     
     private val favoriteDrinks = mutableListOf<FavoriteDrink>()
     
+    init {
+        // Add some sample favorite drinks for testing
+        favoriteDrinks.addAll(
+            listOf(
+                FavoriteDrink(
+                    id = "fav_1",
+                    name = "Caramel Macchiato",
+                    description = "Espresso with vanilla syrup and steamed milk, topped with caramel",
+                    price = 4.95,
+                    imageUrl = "caramel_macchiato.jpg",
+                    rating = 4.8
+                ),
+                FavoriteDrink(
+                    id = "fav_2",
+                    name = "Mocha Latte",
+                    description = "Chocolate and espresso with steamed milk and whipped cream",
+                    price = 5.25,
+                    imageUrl = "mocha_latte.jpg",
+                    rating = 4.9
+                ),
+                FavoriteDrink(
+                    id = "fav_3",
+                    name = "Cold Brew",
+                    description = "Smooth cold-steeped coffee served over ice",
+                    price = 4.50,
+                    imageUrl = "cold_brew.jpg",
+                    rating = 4.6
+                )
+            )
+        )
+    }
+    
     override fun getCurrentUser(): User {
         return User(name = "Coffee Lover", id = "user_001")
     }
