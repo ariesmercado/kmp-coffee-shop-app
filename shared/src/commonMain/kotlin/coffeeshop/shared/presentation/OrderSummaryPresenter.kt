@@ -3,14 +3,12 @@ package coffeeshop.shared.presentation
 import coffeeshop.shared.data.model.Order
 import coffeeshop.shared.data.model.OrderItem
 
-class OrderSummaryPresenter {
-    
-    private val taxRate = 0.08 // 8% tax rate
+class OrderSummaryPresenter(private val defaultTaxRate: Double = 0.08) {
     
     /**
      * Creates an order with calculated subtotal, tax, and total
      */
-    fun createOrder(orderId: String, items: List<OrderItem>): Order {
+    fun createOrder(orderId: String, items: List<OrderItem>, taxRate: Double = defaultTaxRate): Order {
         val subtotal = calculateSubtotal(items)
         val tax = calculateTax(subtotal, taxRate)
         val total = subtotal + tax
@@ -37,13 +35,6 @@ class OrderSummaryPresenter {
      */
     fun calculateTax(subtotal: Double, taxRate: Double): Double {
         return subtotal * taxRate
-    }
-    
-    /**
-     * Calculates the total price including tax
-     */
-    fun calculateTotal(subtotal: Double, tax: Double): Double {
-        return subtotal + tax
     }
     
     /**
