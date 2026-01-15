@@ -1,0 +1,44 @@
+package coffeeshop.shared.presentation
+
+import coffeeshop.shared.data.model.RewardTransaction
+import coffeeshop.shared.data.model.User
+import coffeeshop.shared.data.repository.CoffeeRepository
+import coffeeshop.shared.utils.RewardPointsCalculator
+
+class ProfilePresenter(private val repository: CoffeeRepository) {
+    
+    fun getCurrentUser(): User {
+        return repository.getCurrentUser()
+    }
+    
+    fun getRewardPointsBalance(): Int {
+        return repository.getRewardPointsBalance()
+    }
+    
+    fun getRewardTransactions(): List<RewardTransaction> {
+        return repository.getRewardTransactions()
+    }
+    
+    fun getPointsToNextTier(): Int {
+        val currentPoints = repository.getRewardPointsBalance()
+        return RewardPointsCalculator.getPointsToNextTier(currentPoints)
+    }
+    
+    fun canRedeemPoints(): Boolean {
+        val currentPoints = repository.getRewardPointsBalance()
+        return RewardPointsCalculator.canRedeemPoints(currentPoints)
+    }
+    
+    fun getRedemptionOptions(): List<Pair<Int, Double>> {
+        val currentPoints = repository.getRewardPointsBalance()
+        return RewardPointsCalculator.getRedemptionOptions(currentPoints)
+    }
+    
+    fun redeemPoints(points: Int): Boolean {
+        if (!canRedeemPoints() || points > repository.getRewardPointsBalance()) {
+            return false
+        }
+        val discount = RewardPointsCalculator.calculateDiscountFromPoints(points)
+        return repository.redeemRewardPoints(points, "Redeemed for $${String.format("%.2f", discount)} discount")
+    }
+}
