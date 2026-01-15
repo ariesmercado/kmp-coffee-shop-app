@@ -3,6 +3,7 @@ package coffeeshop.app
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import coffeeshop.app.ui.screen.CustomDrinkBuilderScreen
 import coffeeshop.app.ui.screen.FavoritesScreen
 import coffeeshop.app.ui.screen.HomeScreen
 import coffeeshop.app.ui.screen.MenuScreen
@@ -18,19 +19,21 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CoffeeShopTheme {
-                // To view the Notifications Screen, uncomment the line below
-                NotificationsScreen()
-                // To view the Profile Screen, uncomment the line below and comment out NotificationsScreen()
+                // To view the Custom Drink Builder Screen, uncomment the line below
+                CustomDrinkBuilderScreen()
+                // To view the Notifications Screen, uncomment the line below and comment out CustomDrinkBuilderScreen()
+                // NotificationsScreen()
+                // To view the Profile Screen, uncomment the line below and comment out CustomDrinkBuilderScreen()
                 // ProfileScreen()
-                // To view the Menu Screen with favorites, uncomment the line below and comment out NotificationsScreen()
+                // To view the Menu Screen with favorites, uncomment the line below and comment out CustomDrinkBuilderScreen()
                 // MenuScreen()
-                // To view the Favorites Screen, uncomment the line below and comment out NotificationsScreen()
+                // To view the Favorites Screen, uncomment the line below and comment out CustomDrinkBuilderScreen()
                 // FavoritesScreen()
-                // To view the Order History Screen, uncomment the line below and comment out NotificationsScreen()
+                // To view the Order History Screen, uncomment the line below and comment out CustomDrinkBuilderScreen()
                 // OrderHistoryScreen()
-                // To view the Payment Screen, uncomment the line below and comment out NotificationsScreen()
+                // To view the Payment Screen, uncomment the line below and comment out CustomDrinkBuilderScreen()
                 // PaymentScreen()
-                // To view the Order Summary Screen, uncomment the line below and comment out NotificationsScreen()
+                // To view the Order Summary Screen, uncomment the line below and comment out CustomDrinkBuilderScreen()
                 // OrderSummaryScreen()
                 // HomeScreen()
             }
