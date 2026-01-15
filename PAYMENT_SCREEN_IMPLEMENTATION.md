@@ -118,12 +118,20 @@ WindowGroup {
 ```
 
 **Note on Enum Usage in iOS:**
-The Kotlin enum `PaymentMethod` is exposed to Swift via Kotlin/Native. The enum values follow Swift naming conventions:
-- `CREDIT_CARD` in Kotlin → `creditCard` in Swift
+The Kotlin enum `PaymentMethod` is exposed to Swift via Kotlin/Native. The enum values follow Swift naming conventions (camelCase):
+- `CREDIT_CARD` in Kotlin → `creditCard` in Swift  
 - `DEBIT_CARD` in Kotlin → `debitCard` in Swift
 - `PAYPAL` in Kotlin → `paypal` in Swift
 - `APPLE_PAY` in Kotlin → `applePay` in Swift
 - `GOOGLE_PAY` in Kotlin → `googlePay` in Swift
+
+This is the standard Kotlin/Native enum conversion behavior. When accessing from Swift, use the camelCase names:
+```swift
+let method = PaymentMethod.creditCard  // ✅ Correct
+// NOT PaymentMethod.CREDIT_CARD      // ❌ Incorrect
+```
+
+Similarly, Kotlin Lists are automatically converted to Swift Arrays by the Kotlin/Native framework, so no manual conversion is needed.
 
 ## Validation Rules
 
@@ -152,6 +160,8 @@ Potential improvements for production:
 6. Payment confirmation screen
 7. Receipt generation
 8. Order history integration
+9. Simulate payment failures for better error handling testing (currently always succeeds)
+10. Add retry logic for failed payments
 
 ## Design Consistency
 
