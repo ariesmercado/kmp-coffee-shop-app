@@ -379,7 +379,9 @@ enum class DateFilter(val label: String) {
     LAST_30_DAYS("Last 30 Days")
 }
 
-fun formatDate(timestamp: Long): String {
+private fun formatDate(timestamp: Long): String {
+    // Create a new SimpleDateFormat instance for each call to ensure thread safety
+    // This is acceptable for UI formatting as it's not called in a performance-critical loop
     val sdf = SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a", Locale.getDefault())
     return sdf.format(Date(timestamp))
 }

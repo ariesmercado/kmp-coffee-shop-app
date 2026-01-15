@@ -311,6 +311,8 @@ class MockCoffeeRepository : CoffeeRepository {
         val currentTime = System.currentTimeMillis()
         val oneDayMs = 24 * 60 * 60 * 1000L
         
+        // Note: Add-ons pricing: Extra Shot = $0.75, Whipped Cream = $0.50, Almond Milk = $0.50, Extra Caramel = $0.50
+        
         return listOf(
             OrderHistory(
                 id = "order_001",
@@ -318,7 +320,7 @@ class MockCoffeeRepository : CoffeeRepository {
                 items = listOf(
                     OrderItem(
                         id = "item_001",
-                        menuItemId = "menu_1",
+                        menuItemId = "menu_4",
                         name = "Caramel Macchiato",
                         size = "Large",
                         addOns = listOf("Extra Shot"),

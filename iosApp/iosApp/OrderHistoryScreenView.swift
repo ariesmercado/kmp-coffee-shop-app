@@ -291,6 +291,7 @@ class OrderHistoryViewModel: ObservableObject {
     @Published var filteredOrders: [OrderHistory] = []
     
     private let presenter: OrderHistoryPresenter
+    private var cancellables = Set<AnyCancellable>()
     
     init() {
         let repository = MockCoffeeRepository()
@@ -308,10 +309,11 @@ class OrderHistoryViewModel: ObservableObject {
     
     private func setupObservers() {
         // Using Combine to observe changes
-        _ = Publishers.CombineLatest($searchQuery, $selectedDateFilter)
+        Publishers.CombineLatest($searchQuery, $selectedDateFilter)
             .sink { [weak self] _, _ in
                 self?.updateFilteredOrders()
             }
+            .store(in: &cancellables)
     }
     
     private func updateFilteredOrders() {
