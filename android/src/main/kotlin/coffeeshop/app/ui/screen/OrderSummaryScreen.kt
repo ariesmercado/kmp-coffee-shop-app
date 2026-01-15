@@ -242,7 +242,7 @@ fun CostBreakdownCard(order: Order) {
             
             // Tax
             CostBreakdownRow(
-                label = "Tax (${(order.taxRate * 100).toInt()}%)",
+                label = "Tax (${String.format("%.1f", order.taxRate * 100)}%)",
                 amount = order.tax,
                 isTotal = false
             )

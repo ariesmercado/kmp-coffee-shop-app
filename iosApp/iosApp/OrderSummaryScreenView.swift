@@ -151,7 +151,7 @@ struct CostBreakdownCardView: View {
             
             // Tax
             CostBreakdownRowView(
-                label: "Tax (\(Int(order.taxRate * 100))%)",
+                label: "Tax (\(String(format: "%.1f", order.taxRate * 100))%)",
                 amount: order.tax,
                 isTotal: false
             )
