@@ -52,7 +52,7 @@ struct OrderSummaryScreenView: View {
             )
         }
         .background(CoffeeColors.creamyWhite)
-        .edgesIgnoringSafeArea(.top)
+        .ignoresSafeArea(edges: .top)
     }
 }
 
