@@ -9,6 +9,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -18,17 +20,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coffeeshop.app.ui.theme.*
+import coffeeshop.shared.data.model.FavoriteDrink
 import coffeeshop.shared.data.model.MenuCategory
 import coffeeshop.shared.data.model.MenuItem
 import coffeeshop.shared.data.repository.MockCoffeeRepository
+import coffeeshop.shared.presentation.FavoritesPresenter
 import coffeeshop.shared.presentation.MenuScreenPresenter
 
 @Composable
 fun MenuScreen(
-    presenter: MenuScreenPresenter = remember { MenuScreenPresenter(MockCoffeeRepository()) }
+    presenter: MenuScreenPresenter = remember { MenuScreenPresenter(MockCoffeeRepository()) },
+    favoritesPresenter: FavoritesPresenter = remember { FavoritesPresenter(MockCoffeeRepository()) }
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var selectedCategoryId by remember { mutableStateOf<String?>(null) }
+    var favoriteIds by remember { mutableStateOf(favoritesPresenter.getFavoriteIds()) }
     
     val categories = remember { presenter.getCategories() }
     val menuItems by remember(searchQuery, selectedCategoryId) {
@@ -61,7 +67,22 @@ fun MenuScreen(
         )
         
         // Menu Items
-        MenuItemsList(menuItems = menuItems)
+        MenuItemsList(
+            menuItems = menuItems,
+            favoriteIds = favoriteIds,
+            onToggleFavorite = { item ->
+                val favoriteDrink = FavoriteDrink(
+                    id = item.id,
+                    name = item.name,
+                    description = item.description,
+                    price = item.price,
+                    imageUrl = item.imageUrl,
+                    rating = item.rating
+                )
+                favoritesPresenter.toggleFavorite(favoriteDrink)
+                favoriteIds = favoritesPresenter.getFavoriteIds()
+            }
+        )
     }
 }
 
@@ -181,7 +202,11 @@ fun CategoryChip(
 }
 
 @Composable
-fun MenuItemsList(menuItems: List<MenuItem>) {
+fun MenuItemsList(
+    menuItems: List<MenuItem>,
+    favoriteIds: Set<String>,
+    onToggleFavorite: (MenuItem) -> Unit
+) {
     if (menuItems.isEmpty()) {
         Box(
             modifier = Modifier
@@ -202,14 +227,22 @@ fun MenuItemsList(menuItems: List<MenuItem>) {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(menuItems) { item ->
-                MenuItemCard(item)
+                MenuItemCard(
+                    item = item,
+                    isFavorite = favoriteIds.contains(item.id),
+                    onToggleFavorite = { onToggleFavorite(item) }
+                )
             }
         }
     }
 }
 
 @Composable
-fun MenuItemCard(item: MenuItem) {
+fun MenuItemCard(
+    item: MenuItem,
+    isFavorite: Boolean,
+    onToggleFavorite: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -272,6 +305,19 @@ fun MenuItemCard(item: MenuItem) {
                         style = MaterialTheme.typography.body2
                     )
                 }
+            }
+            
+            // Favorite button
+            IconButton(
+                onClick = onToggleFavorite,
+                modifier = Modifier.size(48.dp)
+            ) {
+                Icon(
+                    imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    contentDescription = if (isFavorite) "Remove from favorites" else "Add to favorites",
+                    tint = if (isFavorite) Color(0xFFE91E63) else MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
+                    modifier = Modifier.size(28.dp)
+                )
             }
         }
     }

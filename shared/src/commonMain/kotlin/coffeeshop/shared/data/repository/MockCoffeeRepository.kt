@@ -1,6 +1,7 @@
 package coffeeshop.shared.data.repository
 
 import coffeeshop.shared.data.model.Banner
+import coffeeshop.shared.data.model.FavoriteDrink
 import coffeeshop.shared.data.model.FeaturedDrink
 import coffeeshop.shared.data.model.MenuCategory
 import coffeeshop.shared.data.model.MenuItem
@@ -9,6 +10,42 @@ import coffeeshop.shared.data.model.OrderItem
 import coffeeshop.shared.data.model.User
 
 class MockCoffeeRepository : CoffeeRepository {
+    
+    private val favoriteDrinks = mutableListOf<FavoriteDrink>()
+    private val favoriteIds = mutableSetOf<String>()
+    
+    init {
+        // Add some sample favorite drinks for testing
+        val sampleFavorites = listOf(
+            FavoriteDrink(
+                id = "fav_1",
+                name = "Caramel Macchiato",
+                description = "Espresso with vanilla syrup and steamed milk, topped with caramel",
+                price = 4.95,
+                imageUrl = "caramel_macchiato.jpg",
+                rating = 4.8
+            ),
+            FavoriteDrink(
+                id = "fav_2",
+                name = "Mocha Latte",
+                description = "Chocolate and espresso with steamed milk and whipped cream",
+                price = 5.25,
+                imageUrl = "mocha_latte.jpg",
+                rating = 4.9
+            ),
+            FavoriteDrink(
+                id = "fav_3",
+                name = "Cold Brew",
+                description = "Smooth cold-steeped coffee served over ice",
+                price = 4.50,
+                imageUrl = "cold_brew.jpg",
+                rating = 4.6
+            )
+        )
+        favoriteDrinks.addAll(sampleFavorites)
+        favoriteIds.addAll(sampleFavorites.map { it.id })
+    }
+    
     override fun getCurrentUser(): User {
         return User(name = "Coffee Lover", id = "user_001")
     }
@@ -525,5 +562,23 @@ class MockCoffeeRepository : CoffeeRepository {
                 status = "Completed"
             )
         ).sortedByDescending { it.orderDate } // Most recent orders first
+    }
+    
+    override fun getFavoriteDrinks(): List<FavoriteDrink> {
+        return favoriteDrinks.toList()
+    }
+    
+    override fun addFavoriteDrink(drink: FavoriteDrink) {
+        favoriteDrinks.add(drink)
+        favoriteIds.add(drink.id)
+    }
+    
+    override fun removeFavoriteDrink(drinkId: String) {
+        favoriteDrinks.removeAll { it.id == drinkId }
+        favoriteIds.remove(drinkId)
+    }
+    
+    override fun isFavorite(drinkId: String): Boolean {
+        return favoriteIds.contains(drinkId)
     }
 }
