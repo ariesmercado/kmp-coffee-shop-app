@@ -2,10 +2,14 @@ package coffeeshop.shared.data.repository
 
 import coffeeshop.shared.data.model.Banner
 import coffeeshop.shared.data.model.FeaturedDrink
+import coffeeshop.shared.data.model.MenuCategory
+import coffeeshop.shared.data.model.MenuItem
 import coffeeshop.shared.data.model.User
 
 interface CoffeeRepository {
     fun getCurrentUser(): User
     fun getBanners(): List<Banner>
     fun getFeaturedDrinks(): List<FeaturedDrink>
+    fun getMenuCategories(): List<MenuCategory>
+    fun getMenuItems(): List<MenuItem>
 }
