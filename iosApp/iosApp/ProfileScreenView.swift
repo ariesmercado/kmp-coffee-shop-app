@@ -162,7 +162,7 @@ struct TransactionItemView: View {
             }
             
             VStack(alignment: .leading, spacing: 4) {
-                Text(transaction.description_)
+                Text(transaction.details)
                     .font(.system(size: 14, weight: .medium))
                     .foregroundColor(CoffeeColors.darkCoffee)
                 

@@ -11,7 +11,7 @@ data class RewardTransaction(
     val type: RewardTransactionType,
     val points: Int,
     val timestamp: Long,
-    val description: String
+    val details: String
 )
 
 enum class RewardTransactionType {

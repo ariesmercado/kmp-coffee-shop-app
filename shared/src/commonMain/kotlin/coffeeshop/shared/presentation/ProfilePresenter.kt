@@ -35,9 +35,18 @@ class ProfilePresenter(private val repository: CoffeeRepository) {
     }
     
     fun redeemPoints(points: Int): Boolean {
-        if (!canRedeemPoints() || points > repository.getRewardPointsBalance()) {
+        val currentBalance = repository.getRewardPointsBalance()
+        
+        // Validate points is multiple of 100
+        if (points < 100 || points % 100 != 0) {
             return false
         }
+        
+        // Validate sufficient balance
+        if (points > currentBalance) {
+            return false
+        }
+        
         val discount = RewardPointsCalculator.calculateDiscountFromPoints(points)
         return repository.redeemRewardPoints(points, "Redeemed for $${String.format("%.2f", discount)} discount")
     }

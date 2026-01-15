@@ -59,35 +59,35 @@ class MockCoffeeRepository : CoffeeRepository {
                 type = RewardTransactionType.EARNED,
                 points = 85,
                 timestamp = currentTime - (1 * oneDayMs),
-                description = "Purchase at Coffee Shop - $16.90"
+                details = "Purchase at Coffee Shop - $16.90"
             ),
             RewardTransaction(
                 id = "reward_2",
                 type = RewardTransactionType.EARNED,
                 points = 25,
                 timestamp = currentTime - (3 * oneDayMs),
-                description = "Purchase at Coffee Shop - $4.86"
+                details = "Purchase at Coffee Shop - $4.86"
             ),
             RewardTransaction(
                 id = "reward_3",
                 type = RewardTransactionType.REDEEMED,
                 points = -100,
                 timestamp = currentTime - (5 * oneDayMs),
-                description = "Redeemed for $5 discount"
+                details = "Redeemed for $5 discount"
             ),
             RewardTransaction(
                 id = "reward_4",
                 type = RewardTransactionType.EARNED,
                 points = 115,
                 timestamp = currentTime - (7 * oneDayMs),
-                description = "Purchase at Coffee Shop - $23.38"
+                details = "Purchase at Coffee Shop - $23.38"
             ),
             RewardTransaction(
                 id = "reward_5",
                 type = RewardTransactionType.EARNED,
                 points = 200,
                 timestamp = currentTime - (10 * oneDayMs),
-                description = "Welcome Bonus"
+                details = "Welcome Bonus"
             )
         ))
     }
@@ -644,7 +644,7 @@ class MockCoffeeRepository : CoffeeRepository {
                 type = RewardTransactionType.EARNED,
                 points = points,
                 timestamp = System.currentTimeMillis(),
-                description = description
+                details = description
             )
         )
     }
@@ -660,7 +660,7 @@ class MockCoffeeRepository : CoffeeRepository {
                 type = RewardTransactionType.REDEEMED,
                 points = -points,
                 timestamp = System.currentTimeMillis(),
-                description = description
+                details = description
             )
         )
         return true

@@ -33,8 +33,10 @@ object RewardPointsCalculator {
     
     /**
      * Calculate discount amount from points
-     * @param pointsToRedeem Number of points to redeem
+     * @param pointsToRedeem Number of points to redeem (must be multiple of 100)
      * @return Discount amount in dollars
+     * Note: Only multiples of MIN_REDEMPTION_POINTS are credited. 
+     * For example, 150 points = $5 (50 points ignored)
      */
     fun calculateDiscountFromPoints(pointsToRedeem: Int): Double {
         if (pointsToRedeem < MIN_REDEMPTION_POINTS) return 0.0

@@ -265,7 +265,7 @@ fun TransactionItem(transaction: RewardTransaction) {
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = transaction.description,
+                    text = transaction.details,
                     style = MaterialTheme.typography.body1.copy(
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium
