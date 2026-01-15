@@ -4,6 +4,8 @@ import coffeeshop.shared.data.model.Banner
 import coffeeshop.shared.data.model.FeaturedDrink
 import coffeeshop.shared.data.model.MenuCategory
 import coffeeshop.shared.data.model.MenuItem
+import coffeeshop.shared.data.model.OrderHistory
+import coffeeshop.shared.data.model.OrderItem
 import coffeeshop.shared.data.model.User
 
 class MockCoffeeRepository : CoffeeRepository {
@@ -302,5 +304,226 @@ class MockCoffeeRepository : CoffeeRepository {
                 categoryId = "iced"
             )
         )
+    }
+
+    override fun getOrderHistory(): List<OrderHistory> {
+        // Creating timestamps for the past 30 days
+        val currentTime = System.currentTimeMillis()
+        val oneDayMs = 24 * 60 * 60 * 1000L
+        
+        // Note: Add-ons pricing: Extra Shot = $0.75, Whipped Cream = $0.50, Almond Milk = $0.50, Extra Caramel = $0.50
+        
+        return listOf(
+            OrderHistory(
+                id = "order_001",
+                orderDate = currentTime - (1 * oneDayMs), // 1 day ago
+                items = listOf(
+                    OrderItem(
+                        id = "item_001",
+                        menuItemId = "menu_4",
+                        name = "Caramel Macchiato",
+                        size = "Large",
+                        addOns = listOf("Extra Shot"),
+                        quantity = 2,
+                        basePrice = 4.95,
+                        itemTotalPrice = 11.40 // (4.95 + 0.75) * 2
+                    ),
+                    OrderItem(
+                        id = "item_002",
+                        menuItemId = "menu_12",
+                        name = "Hot Chocolate",
+                        size = "Medium",
+                        addOns = listOf("Whipped Cream"),
+                        quantity = 1,
+                        basePrice = 3.75,
+                        itemTotalPrice = 4.25
+                    )
+                ),
+                subtotal = 15.65,
+                tax = 1.25,
+                total = 16.90,
+                status = "Completed"
+            ),
+            OrderHistory(
+                id = "order_002",
+                orderDate = currentTime - (3 * oneDayMs), // 3 days ago
+                items = listOf(
+                    OrderItem(
+                        id = "item_003",
+                        menuItemId = "menu_17",
+                        name = "Cold Brew",
+                        size = "Large",
+                        addOns = emptyList(),
+                        quantity = 1,
+                        basePrice = 4.50,
+                        itemTotalPrice = 4.50
+                    )
+                ),
+                subtotal = 4.50,
+                tax = 0.36,
+                total = 4.86,
+                status = "Completed"
+            ),
+            OrderHistory(
+                id = "order_003",
+                orderDate = currentTime - (5 * oneDayMs), // 5 days ago
+                items = listOf(
+                    OrderItem(
+                        id = "item_004",
+                        menuItemId = "menu_3",
+                        name = "Cappuccino",
+                        size = "Medium",
+                        addOns = emptyList(),
+                        quantity = 1,
+                        basePrice = 3.95,
+                        itemTotalPrice = 3.95
+                    ),
+                    OrderItem(
+                        id = "item_005",
+                        menuItemId = "menu_10",
+                        name = "Vanilla Latte",
+                        size = "Large",
+                        addOns = listOf("Extra Shot", "Almond Milk"),
+                        quantity = 1,
+                        basePrice = 4.45,
+                        itemTotalPrice = 5.70 // 4.45 + 0.75 + 0.50
+                    ),
+                    OrderItem(
+                        id = "item_006",
+                        menuItemId = "menu_6",
+                        name = "Mocha Frappuccino",
+                        size = "Large",
+                        addOns = listOf("Whipped Cream"),
+                        quantity = 2,
+                        basePrice = 5.50,
+                        itemTotalPrice = 12.00 // (5.50 + 0.50) * 2
+                    )
+                ),
+                subtotal = 21.65,
+                tax = 1.73,
+                total = 23.38,
+                status = "Completed"
+            ),
+            OrderHistory(
+                id = "order_004",
+                orderDate = currentTime - (7 * oneDayMs), // 7 days ago
+                items = listOf(
+                    OrderItem(
+                        id = "item_007",
+                        menuItemId = "menu_2",
+                        name = "Americano",
+                        size = "Medium",
+                        addOns = emptyList(),
+                        quantity = 1,
+                        basePrice = 3.25,
+                        itemTotalPrice = 3.25
+                    )
+                ),
+                subtotal = 3.25,
+                tax = 0.26,
+                total = 3.51,
+                status = "Completed"
+            ),
+            OrderHistory(
+                id = "order_005",
+                orderDate = currentTime - (10 * oneDayMs), // 10 days ago
+                items = listOf(
+                    OrderItem(
+                        id = "item_008",
+                        menuItemId = "menu_11",
+                        name = "Mocha Latte",
+                        size = "Large",
+                        addOns = listOf("Whipped Cream"),
+                        quantity = 1,
+                        basePrice = 5.25,
+                        itemTotalPrice = 5.75
+                    ),
+                    OrderItem(
+                        id = "item_009",
+                        menuItemId = "menu_13",
+                        name = "Chai Tea Latte",
+                        size = "Medium",
+                        addOns = emptyList(),
+                        quantity = 1,
+                        basePrice = 4.25,
+                        itemTotalPrice = 4.25
+                    )
+                ),
+                subtotal = 10.00,
+                tax = 0.80,
+                total = 10.80,
+                status = "Completed"
+            ),
+            OrderHistory(
+                id = "order_006",
+                orderDate = currentTime - (14 * oneDayMs), // 14 days ago
+                items = listOf(
+                    OrderItem(
+                        id = "item_010",
+                        menuItemId = "menu_18",
+                        name = "Iced Caramel Macchiato",
+                        size = "Large",
+                        addOns = listOf("Extra Shot"),
+                        quantity = 1,
+                        basePrice = 5.25,
+                        itemTotalPrice = 6.00
+                    )
+                ),
+                subtotal = 6.00,
+                tax = 0.48,
+                total = 6.48,
+                status = "Completed"
+            ),
+            OrderHistory(
+                id = "order_007",
+                orderDate = currentTime - (20 * oneDayMs), // 20 days ago
+                items = listOf(
+                    OrderItem(
+                        id = "item_011",
+                        menuItemId = "menu_4",
+                        name = "Caramel Macchiato",
+                        size = "Medium",
+                        addOns = emptyList(),
+                        quantity = 1,
+                        basePrice = 4.95,
+                        itemTotalPrice = 4.95
+                    ),
+                    OrderItem(
+                        id = "item_012",
+                        menuItemId = "menu_7",
+                        name = "Caramel Frappuccino",
+                        size = "Large",
+                        addOns = listOf("Whipped Cream", "Extra Caramel"),
+                        quantity = 1,
+                        basePrice = 5.50,
+                        itemTotalPrice = 6.50
+                    )
+                ),
+                subtotal = 11.45,
+                tax = 0.92,
+                total = 12.37,
+                status = "Completed"
+            ),
+            OrderHistory(
+                id = "order_008",
+                orderDate = currentTime - (25 * oneDayMs), // 25 days ago
+                items = listOf(
+                    OrderItem(
+                        id = "item_013",
+                        menuItemId = "menu_15",
+                        name = "Iced Americano",
+                        size = "Large",
+                        addOns = emptyList(),
+                        quantity = 2,
+                        basePrice = 3.50,
+                        itemTotalPrice = 7.00
+                    )
+                ),
+                subtotal = 7.00,
+                tax = 0.56,
+                total = 7.56,
+                status = "Completed"
+            )
+        ).sortedByDescending { it.orderDate } // Most recent orders first
     }
 }
