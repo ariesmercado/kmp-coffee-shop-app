@@ -326,7 +326,7 @@ class MockCoffeeRepository : CoffeeRepository {
                         addOns = listOf("Extra Shot"),
                         quantity = 2,
                         basePrice = 4.95,
-                        itemTotalPrice = 10.90
+                        itemTotalPrice = 11.40 // (4.95 + 0.75) * 2
                     ),
                     OrderItem(
                         id = "item_002",
@@ -339,9 +339,9 @@ class MockCoffeeRepository : CoffeeRepository {
                         itemTotalPrice = 4.25
                     )
                 ),
-                subtotal = 15.15,
-                tax = 1.21,
-                total = 16.36,
+                subtotal = 15.65,
+                tax = 1.25,
+                total = 16.90,
                 status = "Completed"
             ),
             OrderHistory(
@@ -386,7 +386,7 @@ class MockCoffeeRepository : CoffeeRepository {
                         addOns = listOf("Extra Shot", "Almond Milk"),
                         quantity = 1,
                         basePrice = 4.45,
-                        itemTotalPrice = 5.45
+                        itemTotalPrice = 5.70 // 4.45 + 0.75 + 0.50
                     ),
                     OrderItem(
                         id = "item_006",
@@ -396,12 +396,12 @@ class MockCoffeeRepository : CoffeeRepository {
                         addOns = listOf("Whipped Cream"),
                         quantity = 2,
                         basePrice = 5.50,
-                        itemTotalPrice = 11.50
+                        itemTotalPrice = 12.00 // (5.50 + 0.50) * 2
                     )
                 ),
-                subtotal = 20.90,
-                tax = 1.67,
-                total = 22.57,
+                subtotal = 21.65,
+                tax = 1.73,
+                total = 23.38,
                 status = "Completed"
             ),
             OrderHistory(
