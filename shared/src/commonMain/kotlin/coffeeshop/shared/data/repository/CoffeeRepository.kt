@@ -4,6 +4,7 @@ import coffeeshop.shared.data.model.Banner
 import coffeeshop.shared.data.model.FeaturedDrink
 import coffeeshop.shared.data.model.MenuCategory
 import coffeeshop.shared.data.model.MenuItem
+import coffeeshop.shared.data.model.OrderHistory
 import coffeeshop.shared.data.model.User
 
 interface CoffeeRepository {
@@ -12,4 +13,5 @@ interface CoffeeRepository {
     fun getFeaturedDrinks(): List<FeaturedDrink>
     fun getMenuCategories(): List<MenuCategory>
     fun getMenuItems(): List<MenuItem>
+    fun getOrderHistory(): List<OrderHistory>
 }
