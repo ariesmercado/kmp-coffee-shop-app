@@ -5,6 +5,8 @@ import coffeeshop.shared.data.model.FavoriteDrink
 import coffeeshop.shared.data.model.FeaturedDrink
 import coffeeshop.shared.data.model.MenuCategory
 import coffeeshop.shared.data.model.MenuItem
+import coffeeshop.shared.data.model.Notification
+import coffeeshop.shared.data.model.NotificationType
 import coffeeshop.shared.data.model.OrderHistory
 import coffeeshop.shared.data.model.OrderItem
 import coffeeshop.shared.data.model.RewardTransaction
@@ -17,6 +19,7 @@ class MockCoffeeRepository : CoffeeRepository {
     private val favoriteIds = mutableSetOf<String>()
     private var rewardPointsBalance = 325 // Starting with some points for demo
     private val rewardTransactions = mutableListOf<RewardTransaction>()
+    private val notifications = mutableListOf<Notification>()
     
     init {
         // Add some sample favorite drinks for testing
@@ -88,6 +91,58 @@ class MockCoffeeRepository : CoffeeRepository {
                 points = 200,
                 timestamp = currentTime - (10 * oneDayMs),
                 details = "Welcome Bonus"
+            )
+        ))
+        
+        // Add some sample notifications
+        notifications.addAll(listOf(
+            Notification(
+                id = "notif_1",
+                type = NotificationType.DEAL,
+                title = "☕ Happy Hour Deal!",
+                message = "Get 20% off all Frappuccinos from 2-5 PM today. Don't miss out on this refreshing deal!",
+                timestamp = currentTime - (2 * 60 * 60 * 1000L), // 2 hours ago
+                isRead = false
+            ),
+            Notification(
+                id = "notif_2",
+                type = NotificationType.ORDER_DELIVERED,
+                title = "Order Delivered",
+                message = "Your order #ORD123 has been delivered. Enjoy your coffee!",
+                timestamp = currentTime - (5 * 60 * 60 * 1000L), // 5 hours ago
+                isRead = false
+            ),
+            Notification(
+                id = "notif_3",
+                type = NotificationType.PROMOTION,
+                title = "🎉 New Menu Items!",
+                message = "Try our new Pumpkin Spice Latte and Maple Pecan Macchiato. Limited time only!",
+                timestamp = currentTime - (1 * oneDayMs),
+                isRead = true
+            ),
+            Notification(
+                id = "notif_4",
+                type = NotificationType.ORDER_SHIPPED,
+                title = "Order On The Way",
+                message = "Your order #ORD122 is on its way. Expected delivery in 15 minutes.",
+                timestamp = currentTime - (2 * oneDayMs),
+                isRead = true
+            ),
+            Notification(
+                id = "notif_5",
+                type = NotificationType.ORDER_ACCEPTED,
+                title = "Order Confirmed",
+                message = "We've received your order #ORD124. It will be ready soon!",
+                timestamp = currentTime - (3 * oneDayMs),
+                isRead = true
+            ),
+            Notification(
+                id = "notif_6",
+                type = NotificationType.DEAL,
+                title = "☕ Weekend Special",
+                message = "Buy one coffee, get one 50% off this weekend. Valid for all drinks!",
+                timestamp = currentTime - (4 * oneDayMs),
+                isRead = true
             )
         ))
     }
@@ -664,5 +719,24 @@ class MockCoffeeRepository : CoffeeRepository {
             )
         )
         return true
+    }
+    
+    override fun getNotifications(): List<Notification> {
+        return notifications.sortedByDescending { it.timestamp }
+    }
+    
+    override fun clearNotification(notificationId: String) {
+        notifications.removeAll { it.id == notificationId }
+    }
+    
+    override fun clearAllNotifications() {
+        notifications.clear()
+    }
+    
+    override fun markNotificationAsRead(notificationId: String) {
+        val index = notifications.indexOfFirst { it.id == notificationId }
+        if (index != -1) {
+            notifications[index] = notifications[index].copy(isRead = true)
+        }
     }
 }
