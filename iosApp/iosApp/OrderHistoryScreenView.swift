@@ -1,5 +1,6 @@
 import SwiftUI
 import shared
+import Combine
 
 struct OrderHistoryScreenView: View {
     @StateObject private var viewModel = OrderHistoryViewModel()
