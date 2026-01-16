@@ -14,6 +14,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coffeeshop.app.ui.theme.*
+import coffeeshop.shared.data.model.LoyaltyMembership
+import coffeeshop.shared.data.model.LoyaltyTier
 import coffeeshop.shared.data.model.RewardTransaction
 import coffeeshop.shared.data.model.RewardTransactionType
 import coffeeshop.shared.data.repository.MockCoffeeRepository
@@ -31,6 +33,7 @@ fun ProfileScreen(
     val pointsToNextTier = remember { presenter.getPointsToNextTier() }
     val canRedeem = remember { presenter.canRedeemPoints() }
     val transactions = remember { presenter.getRewardTransactions() }
+    val loyaltyMembership = remember { presenter.getLoyaltyMembership() }
     
     LazyColumn(
         modifier = Modifier
@@ -39,6 +42,10 @@ fun ProfileScreen(
     ) {
         item {
             ProfileHeader(user.name)
+        }
+        
+        item {
+            LoyaltyMembershipCard(loyaltyMembership)
         }
         
         item {
@@ -290,5 +297,197 @@ fun TransactionItem(transaction: RewardTransaction) {
                 )
             )
         }
+    }
+}
+
+@Composable
+fun LoyaltyMembershipCard(membership: LoyaltyMembership) {
+    val tierColor = getTierColor(membership.currentTier)
+    val tierEmoji = getTierEmoji(membership.currentTier)
+    
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .padding(top = 0.dp),
+        shape = RoundedCornerShape(16.dp),
+        elevation = 4.dp,
+        backgroundColor = tierColor
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Loyalty Membership",
+                    style = MaterialTheme.typography.h3.copy(
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                )
+                Text(
+                    text = tierEmoji,
+                    fontSize = 28.sp
+                )
+            }
+            
+            Spacer(modifier = Modifier.height(12.dp))
+            
+            Row(
+                verticalAlignment = Alignment.Bottom
+            ) {
+                Text(
+                    text = membership.currentTier.tierName,
+                    style = MaterialTheme.typography.h1.copy(
+                        color = Color.White,
+                        fontSize = 36.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "TIER",
+                    style = MaterialTheme.typography.body2.copy(
+                        color = Color.White.copy(alpha = 0.8f),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+            }
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            // Tier Benefits
+            Card(
+                shape = RoundedCornerShape(8.dp),
+                backgroundColor = Color.White.copy(alpha = 0.2f)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp)
+                ) {
+                    Text(
+                        text = "Your Benefits",
+                        style = MaterialTheme.typography.body1.copy(
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    membership.currentTier.benefits.take(3).forEach { benefit ->
+                        Row(
+                            modifier = Modifier.padding(vertical = 2.dp)
+                        ) {
+                            Text(
+                                text = "• ",
+                                style = MaterialTheme.typography.body2.copy(
+                                    color = Color.White,
+                                    fontSize = 12.sp
+                                )
+                            )
+                            Text(
+                                text = benefit,
+                                style = MaterialTheme.typography.body2.copy(
+                                    color = Color.White,
+                                    fontSize = 12.sp
+                                )
+                            )
+                        }
+                    }
+                    if (membership.currentTier.benefits.size > 3) {
+                        Text(
+                            text = "• And ${membership.currentTier.benefits.size - 3} more...",
+                            style = MaterialTheme.typography.body2.copy(
+                                color = Color.White,
+                                fontSize = 12.sp
+                            )
+                        )
+                    }
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(12.dp))
+            
+            // Progress to next tier
+            membership.nextTier?.let { nextTier ->
+                Column {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Progress to ${nextTier.tierName}",
+                            style = MaterialTheme.typography.body2.copy(
+                                color = Color.White,
+                                fontSize = 12.sp
+                            )
+                        )
+                        Text(
+                            text = "${membership.progressPercentage}%",
+                            style = MaterialTheme.typography.body2.copy(
+                                color = Color.White,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    LinearProgressIndicator(
+                        progress = membership.progressPercentage / 100f,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(8.dp),
+                        backgroundColor = Color.White.copy(alpha = 0.3f),
+                        color = Color.White
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "${membership.pointsToNextTier} points needed",
+                        style = MaterialTheme.typography.body2.copy(
+                            color = Color.White.copy(alpha = 0.8f),
+                            fontSize = 11.sp
+                        )
+                    )
+                }
+            } ?: run {
+                Text(
+                    text = "🎉 You've reached the highest tier!",
+                    style = MaterialTheme.typography.body2.copy(
+                        color = Color.White,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun getTierColor(tier: LoyaltyTier): Color {
+    return when (tier) {
+        LoyaltyTier.BRONZE -> Color(0xFFCD7F32)
+        LoyaltyTier.SILVER -> Color(0xFFC0C0C0)
+        LoyaltyTier.GOLD -> Color(0xFFFFD700)
+        LoyaltyTier.PLATINUM -> Color(0xFFE5E4E2)
+    }
+}
+
+fun getTierEmoji(tier: LoyaltyTier): String {
+    return when (tier) {
+        LoyaltyTier.BRONZE -> "🥉"
+        LoyaltyTier.SILVER -> "🥈"
+        LoyaltyTier.GOLD -> "🥇"
+        LoyaltyTier.PLATINUM -> "💎"
     }
 }
