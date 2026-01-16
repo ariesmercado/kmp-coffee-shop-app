@@ -10,6 +10,7 @@ import coffeeshop.shared.data.model.PaymentResult
 import coffeeshop.shared.data.model.PaymentTransaction
 import coffeeshop.shared.data.model.SavedPaymentMethod
 import coffeeshop.shared.data.repository.PaymentMethodsRepository
+import coffeeshop.shared.utils.IdGenerator
 
 data class ValidationResult(
     val isValid: Boolean,
@@ -137,7 +138,7 @@ class PaymentPresenter(
         setAsDefault: Boolean = false
     ) {
         val savedMethod = SavedPaymentMethod(
-            id = generatePaymentMethodId(),
+            id = IdGenerator.generatePaymentMethodId(),
             paymentMethod = paymentMethod,
             displayName = displayName,
             lastFourDigits = lastFourDigits,
@@ -168,7 +169,7 @@ class PaymentPresenter(
         billingAddress: BillingAddress
     ): PaymentReceipt {
         return PaymentReceipt(
-            receiptId = "RCP_${System.currentTimeMillis()}",
+            receiptId = IdGenerator.generateReceiptId(),
             transactionId = transactionId,
             orderId = orderId,
             orderItems = orderItems,
@@ -179,9 +180,5 @@ class PaymentPresenter(
             timestamp = System.currentTimeMillis(),
             billingAddress = billingAddress
         )
-    }
-    
-    private fun generatePaymentMethodId(): String {
-        return "PM_${System.currentTimeMillis()}"
     }
 }

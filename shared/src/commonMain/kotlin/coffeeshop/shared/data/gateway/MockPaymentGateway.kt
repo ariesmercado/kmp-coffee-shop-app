@@ -3,6 +3,7 @@ package coffeeshop.shared.data.gateway
 import coffeeshop.shared.data.model.PaymentInfo
 import coffeeshop.shared.data.model.PaymentResult
 import coffeeshop.shared.data.model.PaymentStatus
+import coffeeshop.shared.utils.IdGenerator
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 
@@ -28,16 +29,16 @@ import kotlin.random.Random
  * - Rate limiting and fraud detection
  * - Secure token storage
  */
-class MockPaymentGateway : PaymentGateway {
-    
-    private val successRate = 0.95 // 95% success rate for testing
+class MockPaymentGateway(
+    private val successRate: Double = 0.95 // 95% success rate for testing
+) : PaymentGateway {
     
     override suspend fun processPayment(paymentInfo: PaymentInfo): PaymentResult {
         // Simulate network delay
         delay(2000)
         
         // Generate transaction ID
-        val transactionId = generateTransactionId()
+        val transactionId = IdGenerator.generateTransactionId()
         
         // Simulate payment processing with occasional failures for testing
         val isSuccess = Random.nextDouble() < successRate
@@ -78,16 +79,9 @@ class MockPaymentGateway : PaymentGateway {
         
         return PaymentResult(
             status = PaymentStatus.SUCCESS,
-            transactionId = generateTransactionId(),
+            transactionId = IdGenerator.generateTransactionId(),
             message = "Refund processed successfully",
             timestamp = System.currentTimeMillis()
         )
-    }
-    
-    private fun generateTransactionId(): String {
-        val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        return "TXN_" + (1..12)
-            .map { chars.random() }
-            .joinToString("")
     }
 }

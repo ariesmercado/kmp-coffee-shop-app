@@ -26,6 +26,8 @@ import coffeeshop.shared.presentation.OrderSummaryPresenter
 import coffeeshop.shared.presentation.PaymentPresenter
 import kotlinx.coroutines.launch
 
+private const val SUCCESS_DELAY_MS = 2000L
+
 @Composable
 fun PaymentScreen(
     paymentPresenter: PaymentPresenter = remember { PaymentPresenter() },
@@ -194,7 +196,7 @@ fun PaymentScreen(
                             
                             // Call success callback after short delay
                             if (paymentResultSuccess) {
-                                kotlinx.coroutines.delay(2000)
+                                kotlinx.coroutines.delay(SUCCESS_DELAY_MS)
                                 onPaymentSuccess()
                             }
                         } catch (e: Exception) {
