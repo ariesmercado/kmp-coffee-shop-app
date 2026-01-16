@@ -726,13 +726,6 @@ class MockCoffeeRepository : CoffeeRepository {
     }
     
     private fun addTierUpgradeNotification(newTier: LoyaltyTier) {
-        val tierEmoji = when (newTier) {
-            LoyaltyTier.BRONZE -> "🥉"
-            LoyaltyTier.SILVER -> "🥈"
-            LoyaltyTier.GOLD -> "🥇"
-            LoyaltyTier.PLATINUM -> "💎"
-        }
-        
         val benefitsText = when (newTier) {
             LoyaltyTier.BRONZE -> "You can now earn points and redeem rewards!"
             LoyaltyTier.SILVER -> "You now get 5% discount on all purchases!"
@@ -743,7 +736,7 @@ class MockCoffeeRepository : CoffeeRepository {
         notifications.add(0, Notification(
             id = "tier_${System.currentTimeMillis()}",
             type = NotificationType.TIER_UPGRADE,
-            title = "$tierEmoji Congratulations! ${newTier.tierName} Tier Unlocked!",
+            title = "${newTier.emoji} Congratulations! ${newTier.tierName} Tier Unlocked!",
             message = "You've reached ${newTier.tierName} tier! $benefitsText",
             timestamp = System.currentTimeMillis(),
             isRead = false

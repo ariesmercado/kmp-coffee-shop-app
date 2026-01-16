@@ -238,19 +238,6 @@ struct LoyaltyMembershipCardView: View {
         }
     }
     
-    var tierEmoji: String {
-        switch membership.currentTier {
-        case .bronze:
-            return "🥉"
-        case .silver:
-            return "🥈"
-        case .gold:
-            return "🥇"
-        case .platinum:
-            return "💎"
-        }
-    }
-    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
@@ -260,7 +247,7 @@ struct LoyaltyMembershipCardView: View {
                 
                 Spacer()
                 
-                Text(tierEmoji)
+                Text(membership.currentTier.emoji)
                     .font(.system(size: 28))
             }
             

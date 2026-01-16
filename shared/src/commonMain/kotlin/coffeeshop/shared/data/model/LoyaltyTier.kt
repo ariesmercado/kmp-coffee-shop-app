@@ -7,7 +7,8 @@ enum class LoyaltyTier(
     val tierName: String,
     val pointsRequired: Int,
     val discountPercentage: Int,
-    val benefits: List<String>
+    val benefits: List<String>,
+    val emoji: String
 ) {
     BRONZE(
         tierName = "Bronze",
@@ -17,7 +18,8 @@ enum class LoyaltyTier(
             "Earn 5 points per dollar",
             "Redeem 100 points for $5 off",
             "Birthday reward"
-        )
+        ),
+        emoji = "🥉"
     ),
     SILVER(
         tierName = "Silver",
@@ -29,7 +31,8 @@ enum class LoyaltyTier(
             "5% discount on all purchases",
             "Birthday reward + bonus points",
             "Early access to new menu items"
-        )
+        ),
+        emoji = "🥈"
     ),
     GOLD(
         tierName = "Gold",
@@ -43,7 +46,8 @@ enum class LoyaltyTier(
             "Early access to new menu items",
             "Free drink on your birthday",
             "Priority customer support"
-        )
+        ),
+        emoji = "🥇"
     ),
     PLATINUM(
         tierName = "Platinum",
@@ -59,7 +63,8 @@ enum class LoyaltyTier(
             "Priority customer support",
             "Exclusive platinum-only drinks",
             "Free upgrade to larger size"
-        )
+        ),
+        emoji = "💎"
     );
 
     companion object {

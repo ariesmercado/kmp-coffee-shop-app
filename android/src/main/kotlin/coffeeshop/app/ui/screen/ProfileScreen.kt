@@ -303,7 +303,6 @@ fun TransactionItem(transaction: RewardTransaction) {
 @Composable
 fun LoyaltyMembershipCard(membership: LoyaltyMembership) {
     val tierColor = getTierColor(membership.currentTier)
-    val tierEmoji = getTierEmoji(membership.currentTier)
     
     Card(
         modifier = Modifier
@@ -333,7 +332,7 @@ fun LoyaltyMembershipCard(membership: LoyaltyMembership) {
                     )
                 )
                 Text(
-                    text = tierEmoji,
+                    text = membership.currentTier.emoji,
                     fontSize = 28.sp
                 )
             }
@@ -480,14 +479,5 @@ fun getTierColor(tier: LoyaltyTier): Color {
         LoyaltyTier.SILVER -> Color(0xFFC0C0C0)
         LoyaltyTier.GOLD -> Color(0xFFFFD700)
         LoyaltyTier.PLATINUM -> Color(0xFFE5E4E2)
-    }
-}
-
-fun getTierEmoji(tier: LoyaltyTier): String {
-    return when (tier) {
-        LoyaltyTier.BRONZE -> "🥉"
-        LoyaltyTier.SILVER -> "🥈"
-        LoyaltyTier.GOLD -> "🥇"
-        LoyaltyTier.PLATINUM -> "💎"
     }
 }
