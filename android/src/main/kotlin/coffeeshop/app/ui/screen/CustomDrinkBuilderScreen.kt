@@ -26,7 +26,8 @@ import coffeeshop.shared.presentation.CustomDrinkBuilderPresenter
 
 @Composable
 fun CustomDrinkBuilderScreen(
-    presenter: CustomDrinkBuilderPresenter = remember { CustomDrinkBuilderPresenter(MockCoffeeRepository()) }
+    presenter: CustomDrinkBuilderPresenter = remember { CustomDrinkBuilderPresenter(MockCoffeeRepository()) },
+    onBackClick: () -> Unit = {}
 ) {
     val drinkSizes = remember { DrinkSize.values().toList() }
     
@@ -53,7 +54,10 @@ fun CustomDrinkBuilderScreen(
             .background(MaterialTheme.colors.background)
     ) {
         // Header
-        CustomDrinkBuilderHeader(currentStep)
+        CustomDrinkBuilderHeader(
+            currentStep = currentStep,
+            onBackClick = onBackClick
+        )
         
         // Price Preview
         if (selectedMenuItem != null) {
@@ -184,29 +188,45 @@ fun CustomDrinkBuilderScreen(
 }
 
 @Composable
-fun CustomDrinkBuilderHeader(currentStep: Int) {
+fun CustomDrinkBuilderHeader(currentStep: Int, onBackClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colors.primary)
             .padding(24.dp)
     ) {
-        Text(
-            text = "Custom Drink Builder",
-            style = MaterialTheme.typography.h1.copy(
-                color = MaterialTheme.colors.onPrimary,
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold
-            )
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Create your perfect beverage",
-            style = MaterialTheme.typography.body1.copy(
-                color = MaterialTheme.colors.onPrimary.copy(alpha = 0.9f),
-                fontSize = 16.sp
-            )
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "Custom Drink Builder",
+                    style = MaterialTheme.typography.h1.copy(
+                        color = MaterialTheme.colors.onPrimary,
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Create your perfect beverage",
+                    style = MaterialTheme.typography.body1.copy(
+                        color = MaterialTheme.colors.onPrimary.copy(alpha = 0.9f),
+                        fontSize = 16.sp
+                    )
+                )
+            }
+            TextButton(onClick = onBackClick) {
+                Text(
+                    text = "← Back",
+                    style = MaterialTheme.typography.button.copy(
+                        color = MaterialTheme.colors.onPrimary
+                    )
+                )
+            }
+        }
         Spacer(modifier = Modifier.height(16.dp))
         StepIndicator(currentStep)
     }

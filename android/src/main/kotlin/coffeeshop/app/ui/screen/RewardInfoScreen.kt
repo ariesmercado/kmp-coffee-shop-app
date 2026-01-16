@@ -57,21 +57,37 @@ fun RewardInfoHeader(onBackClick: () -> Unit) {
             .background(MaterialTheme.colors.primary)
             .padding(24.dp)
     ) {
-        Text(
-            text = "Reward Program",
-            style = MaterialTheme.typography.h1.copy(
-                color = MaterialTheme.colors.onPrimary,
-                fontSize = 28.sp
-            )
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Earn points with every purchase and redeem for discounts",
-            style = MaterialTheme.typography.body1.copy(
-                color = MaterialTheme.colors.onPrimary.copy(alpha = 0.9f),
-                fontSize = 16.sp
-            )
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "Reward Program",
+                    style = MaterialTheme.typography.h1.copy(
+                        color = MaterialTheme.colors.onPrimary,
+                        fontSize = 28.sp
+                    )
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Earn points with every purchase and redeem for discounts",
+                    style = MaterialTheme.typography.body1.copy(
+                        color = MaterialTheme.colors.onPrimary.copy(alpha = 0.9f),
+                        fontSize = 16.sp
+                    )
+                )
+            }
+            TextButton(onClick = onBackClick) {
+                Text(
+                    text = "← Back",
+                    style = MaterialTheme.typography.button.copy(
+                        color = MaterialTheme.colors.onPrimary
+                    )
+                )
+            }
+        }
     }
 }
 
