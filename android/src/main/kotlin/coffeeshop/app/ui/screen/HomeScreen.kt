@@ -114,29 +114,35 @@ fun BannerCard(banner: Banner) {
             .width(300.dp)
             .height(150.dp),
         shape = RoundedCornerShape(16.dp),
-        elevation = 4.dp,
+        elevation = 8.dp,
         backgroundColor = Color(android.graphics.Color.parseColor(banner.backgroundColor))
     ) {
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp),
-            verticalArrangement = Arrangement.Center
+                .padding(20.dp)
         ) {
-            Text(
-                text = banner.title,
-                style = MaterialTheme.typography.h3.copy(
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
+            Column(
+                modifier = Modifier.align(Alignment.CenterStart),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = banner.title,
+                    style = MaterialTheme.typography.h3.copy(
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
                 )
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = banner.subtitle,
-                style = MaterialTheme.typography.body1.copy(
-                    color = Color.White.copy(alpha = 0.9f)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = banner.subtitle,
+                    style = MaterialTheme.typography.body1.copy(
+                        color = Color.White.copy(alpha = 0.95f),
+                        fontSize = 15.sp
+                    )
                 )
-            )
+            }
         }
     }
 }
@@ -166,9 +172,9 @@ fun DrinkCard(drink: FeaturedDrink) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(120.dp),
-        shape = RoundedCornerShape(12.dp),
-        elevation = 2.dp,
+            .height(130.dp),
+        shape = RoundedCornerShape(16.dp),
+        elevation = 6.dp,
         backgroundColor = MaterialTheme.colors.surface
     ) {
         Row(
@@ -177,19 +183,19 @@ fun DrinkCard(drink: FeaturedDrink) {
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Placeholder for image (would use AsyncImage in real app)
+            // Enhanced image placeholder with gradient-like background
             Box(
                 modifier = Modifier
-                    .size(80.dp)
+                    .size(90.dp)
                     .background(
-                        color = CoffeeBrown.copy(alpha = 0.3f),
-                        shape = RoundedCornerShape(8.dp)
+                        color = CoffeeBrown.copy(alpha = 0.15f),
+                        shape = RoundedCornerShape(12.dp)
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "☕",
-                    fontSize = 40.sp
+                    fontSize = 48.sp
                 )
             }
             
@@ -200,30 +206,47 @@ fun DrinkCard(drink: FeaturedDrink) {
             ) {
                 Text(
                     text = drink.name,
-                    style = MaterialTheme.typography.h3.copy(fontSize = 18.sp)
+                    style = MaterialTheme.typography.h4.copy(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(6.dp))
                 Text(
                     text = drink.description,
-                    style = MaterialTheme.typography.body2,
+                    style = MaterialTheme.typography.body2.copy(
+                        fontSize = 13.sp,
+                        lineHeight = 18.sp
+                    ),
                     maxLines = 2
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(10.dp))
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
                         text = "$${String.format("%.2f", drink.price)}",
-                        style = MaterialTheme.typography.body1.copy(
+                        style = MaterialTheme.typography.h4.copy(
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colors.primary
+                            color = GoldenAccent
                         )
                     )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Text(
-                        text = "⭐ ${drink.rating}",
-                        style = MaterialTheme.typography.body2
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = "⭐",
+                            fontSize = 16.sp
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = String.format("%.1f", drink.rating),
+                            style = MaterialTheme.typography.body1.copy(
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 15.sp
+                            )
+                        )
+                    }
                 }
             }
         }
@@ -240,17 +263,17 @@ fun NavigationSection(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(horizontal = 16.dp, vertical = 20.dp)
     ) {
         Text(
             text = "Quick Actions",
-            style = MaterialTheme.typography.h2,
-            modifier = Modifier.padding(bottom = 12.dp)
+            style = MaterialTheme.typography.h2.copy(fontSize = 22.sp),
+            modifier = Modifier.padding(bottom = 16.dp)
         )
         
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             NavigationButton(
                 text = "Build Drink",
@@ -266,11 +289,11 @@ fun NavigationSection(
             )
         }
         
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             NavigationButton(
                 text = "Scan Code",
@@ -297,14 +320,14 @@ fun NavigationButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier.height(80.dp),
-        shape = RoundedCornerShape(12.dp),
+        modifier = modifier.height(90.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = MaterialTheme.colors.surface
         ),
         elevation = ButtonDefaults.elevation(
-            defaultElevation = 4.dp,
-            pressedElevation = 8.dp
+            defaultElevation = 6.dp,
+            pressedElevation = 10.dp
         )
     ) {
         Column(
@@ -313,13 +336,14 @@ fun NavigationButton(
         ) {
             Text(
                 text = emoji,
-                fontSize = 28.sp
+                fontSize = 32.sp
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = text,
-                style = MaterialTheme.typography.body2.copy(
-                    fontWeight = FontWeight.Medium,
+                style = MaterialTheme.typography.body1.copy(
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 13.sp,
                     color = MaterialTheme.colors.onSurface
                 )
             )

@@ -9,6 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -115,14 +116,14 @@ fun RewardPointsCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        shape = RoundedCornerShape(16.dp),
-        elevation = 4.dp,
+        shape = RoundedCornerShape(20.dp),
+        elevation = 10.dp,
         backgroundColor = CoffeeBrown
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp)
+                .padding(24.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -133,115 +134,137 @@ fun RewardPointsCard(
                     text = "Reward Points",
                     style = MaterialTheme.typography.h3.copy(
                         color = Color.White,
-                        fontSize = 20.sp,
+                        fontSize = 22.sp,
                         fontWeight = FontWeight.Bold
                     )
                 )
                 Text(
                     text = "⭐",
-                    fontSize = 28.sp
+                    fontSize = 32.sp
                 )
             }
             
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             
             Text(
                 text = "$points",
                 style = MaterialTheme.typography.h1.copy(
-                    color = Color.White,
-                    fontSize = 48.sp,
+                    color = GoldenAccent,
+                    fontSize = 56.sp,
                     fontWeight = FontWeight.Bold
                 )
             )
             
             Text(
                 text = "points available",
-                style = MaterialTheme.typography.body2.copy(
-                    color = Color.White.copy(alpha = 0.8f),
-                    fontSize = 14.sp
+                style = MaterialTheme.typography.body1.copy(
+                    color = Color.White.copy(alpha = 0.85f),
+                    fontSize = 15.sp
                 )
             )
             
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             
             if (pointsToNextTier > 0) {
                 Card(
-                    shape = RoundedCornerShape(8.dp),
-                    backgroundColor = Color.White.copy(alpha = 0.2f)
+                    shape = RoundedCornerShape(12.dp),
+                    backgroundColor = Color.White.copy(alpha = 0.15f),
+                    elevation = 0.dp
                 ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(12.dp),
+                            .padding(14.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
                             text = "🎯",
-                            fontSize = 20.sp
+                            fontSize = 24.sp
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(10.dp))
                         Text(
                             text = "$pointsToNextTier points to next reward tier",
-                            style = MaterialTheme.typography.body2.copy(
-                                color = Color.White
+                            style = MaterialTheme.typography.body1.copy(
+                                color = Color.White,
+                                fontSize = 14.sp
                             )
                         )
                     }
                 }
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
             }
             
             // Scan Barcode button (full width)
             Button(
                 onClick = onScanBarcodeClick,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(54.dp),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = CaramelBrown,
-                    contentColor = Color.White
+                    backgroundColor = GoldenAccent,
+                    contentColor = DarkCoffee
                 ),
-                shape = RoundedCornerShape(8.dp)
+                shape = RoundedCornerShape(12.dp),
+                elevation = ButtonDefaults.elevation(
+                    defaultElevation = 4.dp,
+                    pressedElevation = 8.dp
+                )
             ) {
                 Text(
                     text = "📱 Scan Receipt Barcode",
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
             }
             
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(14.dp))
             
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Button(
                     onClick = onRewardInfoClick,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(50.dp),
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Color.White,
                         contentColor = CoffeeBrown
                     ),
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(12.dp),
+                    elevation = ButtonDefaults.elevation(
+                        defaultElevation = 4.dp,
+                        pressedElevation = 8.dp
+                    )
                 ) {
                     Text(
                         text = "Learn More",
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 15.sp
                     )
                 }
                 
                 if (canRedeem) {
                     Button(
                         onClick = { /* Redeem action would go here */ },
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(50.dp),
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = CaramelBrown,
                             contentColor = Color.White
                         ),
-                        shape = RoundedCornerShape(8.dp)
+                        shape = RoundedCornerShape(12.dp),
+                        elevation = ButtonDefaults.elevation(
+                            defaultElevation = 4.dp,
+                            pressedElevation = 8.dp
+                        )
                     ) {
                         Text(
                             text = "Redeem",
-                            fontWeight = FontWeight.SemiBold
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 15.sp
                         )
                     }
                 }
@@ -260,35 +283,35 @@ fun TransactionItem(transaction: RewardTransaction) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 6.dp),
-        shape = RoundedCornerShape(12.dp),
-        elevation = 2.dp,
+        shape = RoundedCornerShape(14.dp),
+        elevation = 4.dp,
         backgroundColor = MaterialTheme.colors.surface
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(18.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
-                    .size(40.dp)
+                    .size(46.dp)
                     .background(
-                        color = if (isPositive) CoffeeBrown.copy(alpha = 0.2f) 
+                        color = if (isPositive) GoldenAccent.copy(alpha = 0.2f) 
                                 else CaramelBrown.copy(alpha = 0.2f),
-                        shape = RoundedCornerShape(20.dp)
+                        shape = RoundedCornerShape(23.dp)
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = if (isPositive) "+" else "−",
-                    fontSize = 20.sp,
-                    color = if (isPositive) CoffeeBrown else CaramelBrown,
+                    fontSize = 24.sp,
+                    color = if (isPositive) GoldenAccent else CaramelBrown,
                     fontWeight = FontWeight.Bold
                 )
             }
             
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(14.dp))
             
             Column(
                 modifier = Modifier.weight(1f)
@@ -296,14 +319,14 @@ fun TransactionItem(transaction: RewardTransaction) {
                 Text(
                     text = transaction.details,
                     style = MaterialTheme.typography.body1.copy(
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.SemiBold
                     )
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = date,
-                    style = MaterialTheme.typography.body2.copy(
+                    style = MaterialTheme.typography.caption.copy(
                         fontSize = 12.sp,
                         color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
                     )
@@ -312,10 +335,10 @@ fun TransactionItem(transaction: RewardTransaction) {
             
             Text(
                 text = if (isPositive) "+${transaction.points}" else "${transaction.points}",
-                style = MaterialTheme.typography.body1.copy(
-                    fontSize = 16.sp,
+                style = MaterialTheme.typography.h4.copy(
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    color = if (isPositive) CoffeeBrown else CaramelBrown
+                    color = if (isPositive) GoldenAccent else CaramelBrown
                 )
             )
         }
@@ -331,14 +354,14 @@ fun LoyaltyMembershipCard(membership: LoyaltyMembership) {
             .fillMaxWidth()
             .padding(16.dp)
             .padding(top = 0.dp),
-        shape = RoundedCornerShape(16.dp),
-        elevation = 4.dp,
+        shape = RoundedCornerShape(20.dp),
+        elevation = 10.dp,
         backgroundColor = tierColor
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp)
+                .padding(24.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -347,7 +370,7 @@ fun LoyaltyMembershipCard(membership: LoyaltyMembership) {
             ) {
                 Text(
                     text = "Loyalty Membership",
-                    style = MaterialTheme.typography.h3.copy(
+                    style = MaterialTheme.typography.h4.copy(
                         color = Color.White,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
@@ -355,11 +378,11 @@ fun LoyaltyMembershipCard(membership: LoyaltyMembership) {
                 )
                 Text(
                     text = membership.currentTier.emoji,
-                    fontSize = 28.sp
+                    fontSize = 32.sp
                 )
             }
             
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             
             Row(
                 verticalAlignment = Alignment.Bottom
@@ -368,59 +391,60 @@ fun LoyaltyMembershipCard(membership: LoyaltyMembership) {
                     text = membership.currentTier.tierName,
                     style = MaterialTheme.typography.h1.copy(
                         color = Color.White,
-                        fontSize = 36.sp,
+                        fontSize = 40.sp,
                         fontWeight = FontWeight.Bold
                     )
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(10.dp))
                 Text(
                     text = "TIER",
-                    style = MaterialTheme.typography.body2.copy(
-                        color = Color.White.copy(alpha = 0.8f),
-                        fontSize = 16.sp,
+                    style = MaterialTheme.typography.body1.copy(
+                        color = Color.White.copy(alpha = 0.85f),
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     ),
-                    modifier = Modifier.padding(bottom = 4.dp)
+                    modifier = Modifier.padding(bottom = 6.dp)
                 )
             }
             
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             
             // Tier Benefits
             Card(
-                shape = RoundedCornerShape(8.dp),
-                backgroundColor = Color.White.copy(alpha = 0.2f)
+                shape = RoundedCornerShape(12.dp),
+                backgroundColor = Color.White.copy(alpha = 0.15f),
+                elevation = 0.dp
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(12.dp)
+                        .padding(16.dp)
                 ) {
                     Text(
                         text = "Your Benefits",
                         style = MaterialTheme.typography.body1.copy(
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp
+                            fontSize = 15.sp
                         )
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
                     membership.currentTier.benefits.take(3).forEach { benefit ->
                         Row(
-                            modifier = Modifier.padding(vertical = 2.dp)
+                            modifier = Modifier.padding(vertical = 3.dp)
                         ) {
                             Text(
                                 text = "• ",
                                 style = MaterialTheme.typography.body2.copy(
                                     color = Color.White,
-                                    fontSize = 12.sp
+                                    fontSize = 13.sp
                                 )
                             )
                             Text(
                                 text = benefit,
                                 style = MaterialTheme.typography.body2.copy(
                                     color = Color.White,
-                                    fontSize = 12.sp
+                                    fontSize = 13.sp
                                 )
                             )
                         }
@@ -430,14 +454,14 @@ fun LoyaltyMembershipCard(membership: LoyaltyMembership) {
                             text = "• And ${membership.currentTier.benefits.size - 3} more...",
                             style = MaterialTheme.typography.body2.copy(
                                 color = Color.White,
-                                fontSize = 12.sp
+                                fontSize = 13.sp
                             )
                         )
                     }
                 }
             }
             
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             
             // Progress to next tier
             membership.nextTier?.let { nextTier ->
@@ -448,44 +472,46 @@ fun LoyaltyMembershipCard(membership: LoyaltyMembership) {
                     ) {
                         Text(
                             text = "Progress to ${nextTier.tierName}",
-                            style = MaterialTheme.typography.body2.copy(
+                            style = MaterialTheme.typography.body1.copy(
                                 color = Color.White,
-                                fontSize = 12.sp
+                                fontSize = 13.sp,
+                                fontWeight = FontWeight.Medium
                             )
                         )
                         Text(
                             text = "${membership.progressPercentage}%",
-                            style = MaterialTheme.typography.body2.copy(
+                            style = MaterialTheme.typography.body1.copy(
                                 color = Color.White,
-                                fontSize = 12.sp,
+                                fontSize = 13.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         )
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
                     LinearProgressIndicator(
                         progress = membership.progressPercentage / 100f,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(8.dp),
-                        backgroundColor = Color.White.copy(alpha = 0.3f),
-                        color = Color.White
+                            .height(10.dp)
+                            .clip(RoundedCornerShape(5.dp)),
+                        backgroundColor = Color.White.copy(alpha = 0.25f),
+                        color = GoldenAccent
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(6.dp))
                     Text(
                         text = "${membership.pointsToNextTier} points needed",
                         style = MaterialTheme.typography.body2.copy(
-                            color = Color.White.copy(alpha = 0.8f),
-                            fontSize = 11.sp
+                            color = Color.White.copy(alpha = 0.85f),
+                            fontSize = 12.sp
                         )
                     )
                 }
             } ?: run {
                 Text(
                     text = "🎉 You've reached the highest tier!",
-                    style = MaterialTheme.typography.body2.copy(
-                        color = Color.White,
-                        fontSize = 12.sp,
+                    style = MaterialTheme.typography.body1.copy(
+                        color = GoldenAccent,
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
                     )
                 )

@@ -122,8 +122,8 @@ fun SearchBar(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        shape = RoundedCornerShape(12.dp),
-        elevation = 4.dp,
+        shape = RoundedCornerShape(16.dp),
+        elevation = 6.dp,
         backgroundColor = MaterialTheme.colors.surface
     ) {
         TextField(
@@ -133,22 +133,26 @@ fun SearchBar(
             placeholder = {
                 Text(
                     text = "Search for drinks...",
-                    style = MaterialTheme.typography.body1
+                    style = MaterialTheme.typography.body1.copy(
+                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
+                    )
                 )
             },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = "Search",
-                    tint = MaterialTheme.colors.primary
+                    tint = GoldenAccent
                 )
             },
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent,
                 focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
+                unfocusedIndicatorColor = Color.Transparent,
+                cursorColor = GoldenAccent
             ),
-            singleLine = true
+            singleLine = true,
+            textStyle = MaterialTheme.typography.body1
         )
     }
 }
@@ -186,16 +190,17 @@ fun CategoryChip(
     Card(
         modifier = Modifier
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(20.dp),
-        elevation = if (isSelected) 4.dp else 2.dp,
+        shape = RoundedCornerShape(24.dp),
+        elevation = if (isSelected) 6.dp else 3.dp,
         backgroundColor = backgroundColor
     ) {
         Text(
             text = category.name,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),
             style = MaterialTheme.typography.body1.copy(
                 color = textColor,
-                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                fontSize = 15.sp
             )
         )
     }
@@ -246,9 +251,9 @@ fun MenuItemCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(120.dp),
-        shape = RoundedCornerShape(12.dp),
-        elevation = 2.dp,
+            .height(130.dp),
+        shape = RoundedCornerShape(16.dp),
+        elevation = 6.dp,
         backgroundColor = MaterialTheme.colors.surface
     ) {
         Row(
@@ -257,19 +262,19 @@ fun MenuItemCard(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Placeholder for image
+            // Enhanced image placeholder
             Box(
                 modifier = Modifier
-                    .size(80.dp)
+                    .size(90.dp)
                     .background(
-                        color = CoffeeBrown.copy(alpha = 0.3f),
-                        shape = RoundedCornerShape(8.dp)
+                        color = CoffeeBrown.copy(alpha = 0.15f),
+                        shape = RoundedCornerShape(12.dp)
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "☕",
-                    fontSize = 40.sp
+                    fontSize = 48.sp
                 )
             }
             
@@ -280,34 +285,50 @@ fun MenuItemCard(
             ) {
                 Text(
                     text = item.name,
-                    style = MaterialTheme.typography.h3.copy(fontSize = 18.sp)
+                    style = MaterialTheme.typography.h4.copy(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(6.dp))
                 Text(
                     text = item.description,
-                    style = MaterialTheme.typography.body2,
+                    style = MaterialTheme.typography.body2.copy(
+                        fontSize = 13.sp,
+                        lineHeight = 18.sp
+                    ),
                     maxLines = 2
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(10.dp))
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = "$${String.format("%.2f", item.price)}",
-                        style = MaterialTheme.typography.body1.copy(
+                        style = MaterialTheme.typography.h4.copy(
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colors.primary
+                            color = GoldenAccent
                         )
                     )
                     Spacer(modifier = Modifier.width(16.dp))
-                    Text(
-                        text = "⭐ ${item.rating}",
-                        style = MaterialTheme.typography.body2
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = "⭐",
+                            fontSize = 16.sp
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = String.format("%.1f", item.rating),
+                            style = MaterialTheme.typography.body1.copy(
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 15.sp
+                            )
+                        )
+                    }
                 }
             }
             
-            // Favorite button
+            // Enhanced favorite button
             IconButton(
                 onClick = onToggleFavorite,
                 modifier = Modifier.size(48.dp)
@@ -315,8 +336,8 @@ fun MenuItemCard(
                 Icon(
                     imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                     contentDescription = if (isFavorite) "Remove from favorites" else "Add to favorites",
-                    tint = if (isFavorite) Color(0xFFE91E63) else MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
-                    modifier = Modifier.size(28.dp)
+                    tint = if (isFavorite) Color(0xFFE91E63) else MaterialTheme.colors.onSurface.copy(alpha = 0.4f),
+                    modifier = Modifier.size(32.dp)
                 )
             }
         }

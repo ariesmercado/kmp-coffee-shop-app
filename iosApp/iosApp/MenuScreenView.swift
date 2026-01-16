@@ -32,7 +32,7 @@ struct MenuScreenView: View {
                 }
             )
         }
-        .background(CoffeeColors.creamyWhite)
+        .background(CoffeeColors.softBeige)
         .edgesIgnoringSafeArea(.top)
     }
 }
@@ -60,11 +60,11 @@ struct SearchBar: View {
     var body: some View {
         HStack {
             Image(systemName: "magnifyingglass")
-                .foregroundColor(CoffeeColors.coffeeBrown)
+                .foregroundColor(CoffeeColors.goldenAccent)
                 .padding(.leading, 12)
             
             TextField("Search for drinks...", text: $searchText)
-                .font(.system(size: 16))
+                .font(CoffeeTypography.sansSerifBody(size: 16, weight: .regular))
                 .foregroundColor(CoffeeColors.darkCoffee)
                 .padding(.vertical, 12)
             
@@ -78,9 +78,9 @@ struct SearchBar: View {
                 }
             }
         }
-        .background(CoffeeColors.latteFoam)
-        .cornerRadius(12)
-        .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+        .background(CoffeeColors.warmIvory)
+        .cornerRadius(16)
+        .shadow(color: CoffeeColors.cardShadow, radius: 6, x: 0, y: 3)
     }
 }
 
@@ -115,13 +115,13 @@ struct CategoryChip: View {
     var body: some View {
         Button(action: onClick) {
             Text(category.name)
-                .font(.system(size: 16, weight: isSelected ? .bold : .regular))
-                .foregroundColor(isSelected ? .white : CoffeeColors.darkCoffee)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 10)
-                .background(isSelected ? CoffeeColors.coffeeBrown : CoffeeColors.latteFoam)
-                .cornerRadius(20)
-                .shadow(color: Color.black.opacity(isSelected ? 0.15 : 0.05), radius: isSelected ? 4 : 2, x: 0, y: 2)
+                .font(CoffeeTypography.sansSerifBody(size: 15, weight: isSelected ? .bold : .medium))
+                .foregroundColor(isSelected ? CoffeeColors.creamyWhite : CoffeeColors.darkCoffee)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 12)
+                .background(isSelected ? CoffeeColors.coffeeBrown : CoffeeColors.warmIvory)
+                .cornerRadius(24)
+                .shadow(color: isSelected ? CoffeeColors.cardShadow : CoffeeColors.shadowColor, radius: isSelected ? 6 : 3, x: 0, y: 2)
         }
     }
 }
@@ -168,53 +168,59 @@ struct MenuItemCardView: View {
     
     var body: some View {
         HStack(spacing: 16) {
-            // Placeholder for image
+            // Enhanced image placeholder
             ZStack {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(CoffeeColors.coffeeBrown.opacity(0.3))
-                    .frame(width: 80, height: 80)
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(CoffeeColors.coffeeBrown.opacity(0.15))
+                    .frame(width: 90, height: 90)
                 
                 Text("☕")
-                    .font(.system(size: 40))
+                    .font(.system(size: 48))
             }
             
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text(item.name)
-                    .font(.system(size: 18, weight: .semibold))
+                    .font(CoffeeTypography.serifHeader(size: 18, weight: .semibold))
                     .foregroundColor(CoffeeColors.darkCoffee)
                 
                 Text(item.description)
-                    .font(.system(size: 14))
+                    .font(CoffeeTypography.sansSerifBody(size: 13, weight: .regular))
                     .foregroundColor(CoffeeColors.coffeeBrown)
                     .lineLimit(2)
                 
+                Spacer()
+                
                 HStack {
                     Text(String(format: "$%.2f", item.price))
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundColor(CoffeeColors.coffeeBrown)
+                        .font(CoffeeTypography.serifHeader(size: 18, weight: .bold))
+                        .foregroundColor(CoffeeColors.goldenAccent)
                     
                     Spacer()
                     
-                    Text("⭐ \(String(format: "%.1f", item.rating))")
-                        .font(.system(size: 14))
-                        .foregroundColor(CoffeeColors.coffeeBrown)
+                    HStack(spacing: 4) {
+                        Text("⭐")
+                            .font(.system(size: 16))
+                        Text(String(format: "%.1f", item.rating))
+                            .font(CoffeeTypography.sansSerifBody(size: 15, weight: .medium))
+                            .foregroundColor(CoffeeColors.coffeeBrown)
+                    }
                 }
             }
             
-            // Favorite button
+            // Enhanced favorite button
             Button(action: onToggleFavorite) {
                 Image(systemName: isFavorite ? "heart.fill" : "heart")
                     .resizable()
-                    .frame(width: 24, height: 24)
-                    .foregroundColor(isFavorite ? Color(red: 0.914, green: 0.118, blue: 0.388) : CoffeeColors.coffeeBrown.opacity(0.6))
+                    .frame(width: 28, height: 28)
+                    .foregroundColor(isFavorite ? Color(red: 0.914, green: 0.118, blue: 0.388) : CoffeeColors.coffeeBrown.opacity(0.4))
             }
             .padding(.leading, 8)
         }
         .padding(16)
-        .frame(height: 120)
-        .background(CoffeeColors.latteFoam)
-        .cornerRadius(12)
-        .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 2)
+        .frame(height: 130)
+        .background(CoffeeColors.warmIvory)
+        .cornerRadius(16)
+        .shadow(color: CoffeeColors.cardShadow, radius: 6, x: 0, y: 3)
     }
 }
 

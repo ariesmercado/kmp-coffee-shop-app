@@ -15,7 +15,7 @@ struct HomeScreenView: View {
                 FeaturedDrinksSection(drinks: viewModel.featuredDrinks)
             }
         }
-        .background(CoffeeColors.creamyWhite)
+        .background(CoffeeColors.softBeige)
         .edgesIgnoringSafeArea(.top)
     }
 }
@@ -65,19 +65,23 @@ struct BannerCard: View {
     let banner: Banner
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(banner.title)
-                .font(.system(size: 20, weight: .bold))
-                .foregroundColor(.white)
+        ZStack(alignment: .leading) {
+            colorFromHex(banner.backgroundColor)
             
-            Text(banner.subtitle)
-                .font(.system(size: 16))
-                .foregroundColor(.white.opacity(0.9))
+            VStack(alignment: .leading, spacing: 8) {
+                Text(banner.title)
+                    .font(CoffeeTypography.serifHeader(size: 20, weight: .bold))
+                    .foregroundColor(.white)
+                
+                Text(banner.subtitle)
+                    .font(CoffeeTypography.sansSerifBody(size: 15, weight: .regular))
+                    .foregroundColor(.white.opacity(0.95))
+            }
+            .padding(20)
         }
         .frame(width: 300, height: 150)
-        .padding(20)
-        .background(colorFromHex(banner.backgroundColor))
         .cornerRadius(16)
+        .shadow(color: CoffeeColors.cardShadow, radius: 8, x: 0, y: 4)
     }
     
     private func colorFromHex(_ hex: String) -> Color {
@@ -117,46 +121,52 @@ struct DrinkCard: View {
     
     var body: some View {
         HStack(spacing: 16) {
-            // Placeholder for image
+            // Enhanced image placeholder
             ZStack {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(CoffeeColors.coffeeBrown.opacity(0.3))
-                    .frame(width: 80, height: 80)
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(CoffeeColors.coffeeBrown.opacity(0.15))
+                    .frame(width: 90, height: 90)
                 
                 Text("☕")
-                    .font(.system(size: 40))
+                    .font(.system(size: 48))
             }
             
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text(drink.name)
-                    .font(.system(size: 18, weight: .semibold))
+                    .font(CoffeeTypography.serifHeader(size: 18, weight: .semibold))
                     .foregroundColor(CoffeeColors.darkCoffee)
                 
                 Text(drink.description)
-                    .font(.system(size: 14))
+                    .font(CoffeeTypography.sansSerifBody(size: 13, weight: .regular))
                     .foregroundColor(CoffeeColors.coffeeBrown)
                     .lineLimit(2)
                 
+                Spacer()
+                
                 HStack {
                     Text(String(format: "$%.2f", drink.price))
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundColor(CoffeeColors.coffeeBrown)
+                        .font(CoffeeTypography.serifHeader(size: 18, weight: .bold))
+                        .foregroundColor(CoffeeColors.goldenAccent)
                     
                     Spacer()
                     
-                    Text("⭐ \(String(format: "%.1f", drink.rating))")
-                        .font(.system(size: 14))
-                        .foregroundColor(CoffeeColors.coffeeBrown)
+                    HStack(spacing: 4) {
+                        Text("⭐")
+                            .font(.system(size: 16))
+                        Text(String(format: "%.1f", drink.rating))
+                            .font(CoffeeTypography.sansSerifBody(size: 15, weight: .medium))
+                            .foregroundColor(CoffeeColors.coffeeBrown)
+                    }
                 }
             }
             
             Spacer()
         }
         .padding(16)
-        .frame(height: 120)
-        .background(CoffeeColors.latteFoam)
-        .cornerRadius(12)
-        .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 2)
+        .frame(height: 130)
+        .background(CoffeeColors.warmIvory)
+        .cornerRadius(16)
+        .shadow(color: CoffeeColors.cardShadow, radius: 6, x: 0, y: 3)
     }
 }
 
