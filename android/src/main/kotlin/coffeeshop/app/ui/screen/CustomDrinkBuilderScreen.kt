@@ -26,7 +26,8 @@ import coffeeshop.shared.presentation.CustomDrinkBuilderPresenter
 
 @Composable
 fun CustomDrinkBuilderScreen(
-    presenter: CustomDrinkBuilderPresenter = remember { CustomDrinkBuilderPresenter(MockCoffeeRepository()) }
+    presenter: CustomDrinkBuilderPresenter = remember { CustomDrinkBuilderPresenter(MockCoffeeRepository()) },
+    onBackClick: () -> Unit = {}
 ) {
     val drinkSizes = remember { DrinkSize.values().toList() }
     

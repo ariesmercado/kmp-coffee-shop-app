@@ -22,7 +22,11 @@ import coffeeshop.shared.presentation.HomeScreenPresenter
 
 @Composable
 fun HomeScreen(
-    presenter: HomeScreenPresenter = remember { HomeScreenPresenter(MockCoffeeRepository()) }
+    presenter: HomeScreenPresenter = remember { HomeScreenPresenter(MockCoffeeRepository()) },
+    onNavigateToDrinkBuilder: () -> Unit = {},
+    onNavigateToLoyalty: () -> Unit = {},
+    onNavigateToScanner: () -> Unit = {},
+    onNavigateToPayment: () -> Unit = {}
 ) {
     val greeting = remember { presenter.getGreeting() }
     val banners = remember { presenter.getBanners() }
@@ -36,6 +40,15 @@ fun HomeScreen(
     ) {
         item {
             GreetingSection(greeting)
+        }
+        
+        item {
+            NavigationSection(
+                onNavigateToDrinkBuilder = onNavigateToDrinkBuilder,
+                onNavigateToLoyalty = onNavigateToLoyalty,
+                onNavigateToScanner = onNavigateToScanner,
+                onNavigateToPayment = onNavigateToPayment
+            )
         }
         
         item {
@@ -213,6 +226,103 @@ fun DrinkCard(drink: FeaturedDrink) {
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun NavigationSection(
+    onNavigateToDrinkBuilder: () -> Unit,
+    onNavigateToLoyalty: () -> Unit,
+    onNavigateToScanner: () -> Unit,
+    onNavigateToPayment: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Text(
+            text = "Quick Actions",
+            style = MaterialTheme.typography.h2,
+            modifier = Modifier.padding(bottom = 12.dp)
+        )
+        
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            NavigationButton(
+                text = "Build Drink",
+                emoji = "🎨",
+                onClick = onNavigateToDrinkBuilder,
+                modifier = Modifier.weight(1f)
+            )
+            NavigationButton(
+                text = "Rewards",
+                emoji = "⭐",
+                onClick = onNavigateToLoyalty,
+                modifier = Modifier.weight(1f)
+            )
+        }
+        
+        Spacer(modifier = Modifier.height(8.dp))
+        
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            NavigationButton(
+                text = "Scan Code",
+                emoji = "📷",
+                onClick = onNavigateToScanner,
+                modifier = Modifier.weight(1f)
+            )
+            NavigationButton(
+                text = "Payment",
+                emoji = "💳",
+                onClick = onNavigateToPayment,
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
+}
+
+@Composable
+fun NavigationButton(
+    text: String,
+    emoji: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier.height(80.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = MaterialTheme.colors.surface
+        ),
+        elevation = ButtonDefaults.elevation(
+            defaultElevation = 4.dp,
+            pressedElevation = 8.dp
+        )
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = emoji,
+                fontSize = 28.sp
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = text,
+                style = MaterialTheme.typography.body2.copy(
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colors.onSurface
+                )
+            )
         }
     }
 }
