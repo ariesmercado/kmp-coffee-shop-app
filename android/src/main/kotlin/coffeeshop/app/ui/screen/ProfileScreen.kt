@@ -26,7 +26,8 @@ import java.util.*
 @Composable
 fun ProfileScreen(
     presenter: ProfilePresenter = remember { ProfilePresenter(MockCoffeeRepository()) },
-    onRewardInfoClick: () -> Unit = {}
+    onRewardInfoClick: () -> Unit = {},
+    onScanBarcodeClick: () -> Unit = {}
 ) {
     val user = remember { presenter.getCurrentUser() }
     val rewardPoints by remember { mutableStateOf(presenter.getRewardPointsBalance()) }
@@ -53,7 +54,8 @@ fun ProfileScreen(
                 points = rewardPoints,
                 pointsToNextTier = pointsToNextTier,
                 canRedeem = canRedeem,
-                onRewardInfoClick = onRewardInfoClick
+                onRewardInfoClick = onRewardInfoClick,
+                onScanBarcodeClick = onScanBarcodeClick
             )
         }
         
@@ -106,7 +108,8 @@ fun RewardPointsCard(
     points: Int,
     pointsToNextTier: Int,
     canRedeem: Boolean,
-    onRewardInfoClick: () -> Unit
+    onRewardInfoClick: () -> Unit,
+    onScanBarcodeClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -187,6 +190,25 @@ fun RewardPointsCard(
                 }
                 Spacer(modifier = Modifier.height(12.dp))
             }
+            
+            // Scan Barcode button (full width)
+            Button(
+                onClick = onScanBarcodeClick,
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = CaramelBrown,
+                    contentColor = Color.White
+                ),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text(
+                    text = "📱 Scan Receipt Barcode",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 16.sp
+                )
+            }
+            
+            Spacer(modifier = Modifier.height(12.dp))
             
             Row(
                 modifier = Modifier.fillMaxWidth(),
