@@ -8,7 +8,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         
         <activity
-            android:name=".MainActivity"
+            android:name="com.coffeeshop.android.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
