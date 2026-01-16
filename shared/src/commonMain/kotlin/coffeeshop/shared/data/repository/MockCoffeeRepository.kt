@@ -763,7 +763,7 @@ class MockCoffeeRepository : CoffeeRepository {
     }
     
     override fun saveCustomDrink(drink: CustomDrink) {
-        // Remove existing drink with same id if it exists
+        // Upsert: Remove existing drink with same id if it exists, then add the new one
         customDrinks.removeAll { it.id == drink.id }
         customDrinks.add(drink)
     }

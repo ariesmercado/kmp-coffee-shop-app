@@ -93,16 +93,13 @@ fun CustomDrinkBuilderScreen(
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                     }
-                    item {
-                        DrinkSize.values().forEach { size ->
-                            SizeSelectionCard(
-                                size = size,
-                                basePrice = selectedMenuItem?.price ?: 0.0,
-                                isSelected = selectedSize == size,
-                                onClick = { selectedSize = size }
-                            )
-                            Spacer(modifier = Modifier.height(12.dp))
-                        }
+                    items(DrinkSize.values()) { size ->
+                        SizeSelectionCard(
+                            size = size,
+                            basePrice = selectedMenuItem?.price ?: 0.0,
+                            isSelected = selectedSize == size,
+                            onClick = { selectedSize = size }
+                        )
                     }
                 }
                 3 -> {

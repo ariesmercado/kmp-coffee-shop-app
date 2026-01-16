@@ -30,7 +30,7 @@ class CustomDrinkBuilderPresenter(private val repository: CoffeeRepository) {
     ): CustomDrink {
         val totalPrice = calculateTotalPrice(baseMenuItem, size, addOns)
         val drink = CustomDrink(
-            id = "custom_${System.currentTimeMillis()}",
+            id = "custom_${System.currentTimeMillis()}_${(0..999).random()}",
             baseMenuItem = baseMenuItem,
             size = size,
             addOns = addOns,

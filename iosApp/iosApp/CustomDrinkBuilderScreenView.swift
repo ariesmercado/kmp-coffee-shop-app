@@ -141,6 +141,8 @@ struct StepOneContent: View {
 struct StepTwoContent: View {
     @ObservedObject var viewModel: CustomDrinkBuilderViewModel
     
+    private let sizes = [DrinkSize.small, DrinkSize.medium, DrinkSize.large]
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Step 2: Select Size")
@@ -148,7 +150,7 @@ struct StepTwoContent: View {
                 .foregroundColor(CoffeeColors.darkCoffee)
                 .padding(.bottom, 8)
             
-            ForEach([DrinkSize.small, DrinkSize.medium, DrinkSize.large], id: \.displayName) { size in
+            ForEach(sizes, id: \.displayName) { size in
                 SizeSelectionCard(
                     size: size,
                     basePrice: viewModel.selectedMenuItem?.price ?? 0.0,
