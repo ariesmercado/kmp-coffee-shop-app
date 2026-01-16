@@ -2,6 +2,7 @@ package coffeeshop.shared.data.repository
 
 import coffeeshop.shared.data.model.AddOn
 import coffeeshop.shared.data.model.Banner
+import coffeeshop.shared.data.model.BarcodeScanResult
 import coffeeshop.shared.data.model.CustomDrink
 import coffeeshop.shared.data.model.FavoriteDrink
 import coffeeshop.shared.data.model.FeaturedDrink
@@ -15,6 +16,7 @@ import coffeeshop.shared.data.model.OrderItem
 import coffeeshop.shared.data.model.RewardTransaction
 import coffeeshop.shared.data.model.RewardTransactionType
 import coffeeshop.shared.data.model.User
+import coffeeshop.shared.utils.BarcodeValidator
 
 class MockCoffeeRepository : CoffeeRepository {
     
@@ -25,6 +27,7 @@ class MockCoffeeRepository : CoffeeRepository {
     private val rewardTransactions = mutableListOf<RewardTransaction>()
     private val notifications = mutableListOf<Notification>()
     private val customDrinks = mutableListOf<CustomDrink>()
+    private val scannedBarcodes = mutableSetOf<String>() // Track scanned barcodes to prevent duplicates
     
     companion object {
         private const val HOUR_IN_MILLIS = 60 * 60 * 1000L
@@ -809,5 +812,48 @@ class MockCoffeeRepository : CoffeeRepository {
     
     override fun removeCustomDrink(drinkId: String) {
         customDrinks.removeAll { it.id == drinkId }
+    }
+    
+    override fun processReceiptBarcode(barcodeCode: String): BarcodeScanResult {
+        // Check if barcode has already been scanned
+        if (scannedBarcodes.contains(barcodeCode)) {
+            return BarcodeScanResult(
+                success = false,
+                pointsAdded = 0,
+                message = "This receipt has already been scanned"
+            )
+        }
+        
+        // Validate the barcode
+        val receiptBarcode = BarcodeValidator.validateBarcode(barcodeCode)
+        
+        if (!receiptBarcode.isValid) {
+            return BarcodeScanResult(
+                success = false,
+                pointsAdded = 0,
+                message = "Invalid barcode. Please check and try again.",
+                receiptBarcode = receiptBarcode
+            )
+        }
+        
+        // Calculate points from the receipt amount
+        val points = BarcodeValidator.calculatePointsFromAmount(receiptBarcode.amountCents)
+        
+        // Add points to user's account
+        addRewardPoints(points, "Receipt scan - $${receiptBarcode.amountCents / 100.0}")
+        
+        // Mark barcode as scanned
+        scannedBarcodes.add(barcodeCode)
+        
+        return BarcodeScanResult(
+            success = true,
+            pointsAdded = points,
+            message = "Successfully added $points points to your account!",
+            receiptBarcode = receiptBarcode
+        )
+    }
+    
+    override fun hasScannedBarcode(barcodeCode: String): Boolean {
+        return scannedBarcodes.contains(barcodeCode)
     }
 }
