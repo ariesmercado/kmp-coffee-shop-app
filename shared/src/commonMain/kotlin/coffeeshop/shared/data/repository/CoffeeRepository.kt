@@ -2,6 +2,7 @@ package coffeeshop.shared.data.repository
 
 import coffeeshop.shared.data.model.AddOn
 import coffeeshop.shared.data.model.Banner
+import coffeeshop.shared.data.model.BarcodeScanResult
 import coffeeshop.shared.data.model.CustomDrink
 import coffeeshop.shared.data.model.FavoriteDrink
 import coffeeshop.shared.data.model.FeaturedDrink
@@ -36,4 +37,6 @@ interface CoffeeRepository {
     fun saveCustomDrink(drink: CustomDrink)
     fun getSavedCustomDrinks(): List<CustomDrink>
     fun removeCustomDrink(drinkId: String)
+    fun processReceiptBarcode(barcodeCode: String): BarcodeScanResult
+    fun hasScannedBarcode(barcodeCode: String): Boolean
 }
