@@ -1,6 +1,6 @@
 package coffeeshop.shared.utils
 
-expect fun getCurrentHour(): Int
+//expect fun getCurrentHour(): Int
 
 fun getGreetingForTime(hour: Int): String {
     return when (hour) {
@@ -12,7 +12,7 @@ fun getGreetingForTime(hour: Int): String {
 }
 
 fun getPersonalizedGreeting(userName: String): String {
-    val hour = getCurrentHour()
-    val greeting = getGreetingForTime(hour)
-    return "$greeting, $userName!"
+//    val hour = getCurrentHour()
+//    val greeting = getGreetingForTime(hour)
+    return "Hi, $userName!"
 }
