@@ -5,6 +5,7 @@ import coffeeshop.shared.data.model.Banner
 import coffeeshop.shared.data.model.CustomDrink
 import coffeeshop.shared.data.model.FavoriteDrink
 import coffeeshop.shared.data.model.FeaturedDrink
+import coffeeshop.shared.data.model.LoyaltyTier
 import coffeeshop.shared.data.model.MenuCategory
 import coffeeshop.shared.data.model.MenuItem
 import coffeeshop.shared.data.model.Notification
@@ -20,6 +21,7 @@ class MockCoffeeRepository : CoffeeRepository {
     private val favoriteDrinks = mutableListOf<FavoriteDrink>()
     private val favoriteIds = mutableSetOf<String>()
     private var rewardPointsBalance = 325 // Starting with some points for demo
+    private var totalPointsEarned = 1850 // Total accumulated to demonstrate Gold tier
     private val rewardTransactions = mutableListOf<RewardTransaction>()
     private val notifications = mutableListOf<Notification>()
     private val customDrinks = mutableListOf<CustomDrink>()
@@ -155,7 +157,7 @@ class MockCoffeeRepository : CoffeeRepository {
     }
     
     override fun getCurrentUser(): User {
-        return User(name = "Coffee Lover", id = "user_001", rewardPoints = rewardPointsBalance)
+        return User(name = "Coffee Lover", id = "user_001", rewardPoints = rewardPointsBalance, totalPointsEarned = totalPointsEarned)
     }
 
     override fun getBanners(): List<Banner> {
@@ -694,12 +696,22 @@ class MockCoffeeRepository : CoffeeRepository {
         return rewardPointsBalance
     }
     
+    override fun getTotalPointsEarned(): Int {
+        return totalPointsEarned
+    }
+    
     override fun getRewardTransactions(): List<RewardTransaction> {
         return rewardTransactions.sortedByDescending { it.timestamp }
     }
     
     override fun addRewardPoints(points: Int, description: String) {
+        val previousTier = LoyaltyTier.getTierByPoints(totalPointsEarned)
+        
         rewardPointsBalance += points
+        totalPointsEarned += points
+        
+        val newTier = LoyaltyTier.getTierByPoints(totalPointsEarned)
+        
         rewardTransactions.add(
             RewardTransaction(
                 id = "reward_${System.currentTimeMillis()}",
@@ -709,6 +721,29 @@ class MockCoffeeRepository : CoffeeRepository {
                 details = description
             )
         )
+        
+        // Check for tier upgrade and add notification
+        if (newTier != previousTier) {
+            addTierUpgradeNotification(newTier)
+        }
+    }
+    
+    private fun addTierUpgradeNotification(newTier: LoyaltyTier) {
+        val benefitsText = when (newTier) {
+            LoyaltyTier.BRONZE -> "You can now earn points and redeem rewards!"
+            LoyaltyTier.SILVER -> "You now get 5% discount on all purchases!"
+            LoyaltyTier.GOLD -> "You now get 10% discount on all purchases and a free birthday drink!"
+            LoyaltyTier.PLATINUM -> "You now get 15% discount, exclusive drinks, and free size upgrades!"
+        }
+        
+        notifications.add(0, Notification(
+            id = "tier_${System.currentTimeMillis()}",
+            type = NotificationType.TIER_UPGRADE,
+            title = "${newTier.emoji} Congratulations! ${newTier.tierName} Tier Unlocked!",
+            message = "You've reached ${newTier.tierName} tier! $benefitsText",
+            timestamp = System.currentTimeMillis(),
+            isRead = false
+        ))
     }
     
     override fun redeemRewardPoints(points: Int, description: String): Boolean {

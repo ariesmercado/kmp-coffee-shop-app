@@ -1,11 +1,15 @@
 package coffeeshop.shared.utils
 
+import coffeeshop.shared.data.model.LoyaltyMembership
+import coffeeshop.shared.data.model.LoyaltyTier
+
 /**
  * Utility class for calculating reward points
  * Rules:
  * - Earn 5 points per dollar spent
  * - Minimum redemption: 100 points = $5 discount
  * - Points tiers: 100, 200, 500, 1000 points
+ * - Loyalty tiers: Bronze (0), Silver (500), Gold (1500), Platinum (3000)
  */
 object RewardPointsCalculator {
     
@@ -74,5 +78,30 @@ object RewardPointsCalculator {
         }
         
         return options
+    }
+    
+    /**
+     * Get loyalty membership information
+     * @param totalPointsEarned Total points earned throughout user's history
+     * @param currentPoints User's current available points
+     * @return LoyaltyMembership object with tier information
+     */
+    fun getLoyaltyMembership(totalPointsEarned: Int, currentPoints: Int): LoyaltyMembership {
+        val tier = LoyaltyTier.getTierByPoints(totalPointsEarned)
+        return LoyaltyMembership(
+            currentTier = tier,
+            totalPointsEarned = totalPointsEarned,
+            currentPoints = currentPoints
+        )
+    }
+    
+    /**
+     * Calculate discount based on loyalty tier
+     * @param purchaseAmount The purchase amount before discount
+     * @param tier The user's loyalty tier
+     * @return Discount amount in dollars
+     */
+    fun calculateTierDiscount(purchaseAmount: Double, tier: LoyaltyTier): Double {
+        return purchaseAmount * (tier.discountPercentage / 100.0)
     }
 }

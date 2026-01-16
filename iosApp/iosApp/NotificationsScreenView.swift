@@ -149,6 +149,8 @@ struct NotificationTypeBadgeView: View {
             return (Color.orange.opacity(0.2), Color.orange.opacity(0.8), "Shipping")
         case .orderDelivered:
             return (Color.green.opacity(0.2), Color.green.opacity(0.8), "Delivered")
+        case .tierUpgrade:
+            return (Color.yellow.opacity(0.2), Color.yellow.opacity(0.8), "Tier Upgrade")
         case .general:
             return (Color.gray.opacity(0.2), Color.gray.opacity(0.8), "Info")
         @unknown default:

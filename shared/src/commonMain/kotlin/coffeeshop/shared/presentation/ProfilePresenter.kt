@@ -1,5 +1,6 @@
 package coffeeshop.shared.presentation
 
+import coffeeshop.shared.data.model.LoyaltyMembership
 import coffeeshop.shared.data.model.RewardTransaction
 import coffeeshop.shared.data.model.User
 import coffeeshop.shared.data.repository.CoffeeRepository
@@ -49,5 +50,11 @@ class ProfilePresenter(private val repository: CoffeeRepository) {
         
         val discount = RewardPointsCalculator.calculateDiscountFromPoints(points)
         return repository.redeemRewardPoints(points, "Redeemed for $${String.format("%.2f", discount)} discount")
+    }
+    
+    fun getLoyaltyMembership(): LoyaltyMembership {
+        val totalPointsEarned = repository.getTotalPointsEarned()
+        val currentPoints = repository.getRewardPointsBalance()
+        return RewardPointsCalculator.getLoyaltyMembership(totalPointsEarned, currentPoints)
     }
 }
