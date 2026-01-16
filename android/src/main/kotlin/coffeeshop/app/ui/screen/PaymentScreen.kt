@@ -264,36 +264,36 @@ fun PaymentHeader() {
 fun TotalAmountCard(order: Order) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        elevation = 2.dp,
-        backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.1f)
+        shape = RoundedCornerShape(20.dp),
+        elevation = 8.dp,
+        backgroundColor = CoffeeBrown.copy(alpha = 0.08f)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp)
+                .padding(24.dp)
         ) {
             Text(
                 text = "Total Amount",
-                style = MaterialTheme.typography.h3.copy(
+                style = MaterialTheme.typography.h5.copy(
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.Normal
+                    fontWeight = FontWeight.Medium
                 ),
                 color = MaterialTheme.colors.onSurface.copy(alpha = 0.7f)
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = "$${String.format("%.2f", order.total)}",
                 style = MaterialTheme.typography.h1.copy(
-                    fontSize = 36.sp,
+                    fontSize = 42.sp,
                     fontWeight = FontWeight.Bold
                 ),
-                color = MaterialTheme.colors.primary
+                color = GoldenAccent
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = "Including tax: $${String.format("%.2f", order.tax)}",
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.body2.copy(fontSize = 13.sp),
                 color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
             )
         }
@@ -314,17 +314,17 @@ fun PaymentMethodCard(
                 if (isSelected) {
                     Modifier.border(
                         width = 2.dp,
-                        color = MaterialTheme.colors.primary,
-                        shape = RoundedCornerShape(12.dp)
+                        color = GoldenAccent,
+                        shape = RoundedCornerShape(16.dp)
                     )
                 } else {
                     Modifier
                 }
             ),
-        shape = RoundedCornerShape(12.dp),
-        elevation = if (isSelected) 4.dp else 2.dp,
+        shape = RoundedCornerShape(16.dp),
+        elevation = if (isSelected) 8.dp else 3.dp,
         backgroundColor = if (isSelected) {
-            MaterialTheme.colors.primary.copy(alpha = 0.05f)
+            GoldenAccent.copy(alpha = 0.08f)
         } else {
             MaterialTheme.colors.surface
         }
@@ -332,15 +332,15 @@ fun PaymentMethodCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(20.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = paymentMethod.displayName,
                 style = MaterialTheme.typography.body1.copy(
-                    fontSize = 16.sp,
-                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                    fontSize = 17.sp,
+                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
                 ),
                 color = MaterialTheme.colors.onSurface
             )
@@ -349,7 +349,7 @@ fun PaymentMethodCard(
                 selected = isSelected,
                 onClick = onSelect,
                 colors = RadioButtonDefaults.colors(
-                    selectedColor = MaterialTheme.colors.primary,
+                    selectedColor = GoldenAccent,
                     unselectedColor = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
                 )
             )
@@ -376,15 +376,15 @@ fun BillingAddressForm(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        elevation = 2.dp,
+        shape = RoundedCornerShape(16.dp),
+        elevation = 4.dp,
         backgroundColor = MaterialTheme.colors.surface
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             // Full Name
             OutlinedTextField(
@@ -393,9 +393,11 @@ fun BillingAddressForm(
                 label = { Text("Full Name") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
+                shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = MaterialTheme.colors.primary,
-                    focusedLabelColor = MaterialTheme.colors.primary
+                    focusedBorderColor = GoldenAccent,
+                    focusedLabelColor = GoldenAccent,
+                    cursorColor = GoldenAccent
                 )
             )
             
@@ -406,9 +408,11 @@ fun BillingAddressForm(
                 label = { Text("Address Line 1") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
+                shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = MaterialTheme.colors.primary,
-                    focusedLabelColor = MaterialTheme.colors.primary
+                    focusedBorderColor = GoldenAccent,
+                    focusedLabelColor = GoldenAccent,
+                    cursorColor = GoldenAccent
                 )
             )
             
@@ -419,9 +423,11 @@ fun BillingAddressForm(
                 label = { Text("Address Line 2 (Optional)") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
+                shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = MaterialTheme.colors.primary,
-                    focusedLabelColor = MaterialTheme.colors.primary
+                    focusedBorderColor = GoldenAccent,
+                    focusedLabelColor = GoldenAccent,
+                    cursorColor = GoldenAccent
                 )
             )
             
@@ -432,16 +438,18 @@ fun BillingAddressForm(
                 label = { Text("City") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
+                shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = MaterialTheme.colors.primary,
-                    focusedLabelColor = MaterialTheme.colors.primary
+                    focusedBorderColor = GoldenAccent,
+                    focusedLabelColor = GoldenAccent,
+                    cursorColor = GoldenAccent
                 )
             )
             
             // State and ZIP Code
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 OutlinedTextField(
                     value = state,
@@ -449,9 +457,11 @@ fun BillingAddressForm(
                     label = { Text("State") },
                     modifier = Modifier.weight(1f),
                     singleLine = true,
+                    shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = MaterialTheme.colors.primary,
-                        focusedLabelColor = MaterialTheme.colors.primary
+                        focusedBorderColor = GoldenAccent,
+                        focusedLabelColor = GoldenAccent,
+                        cursorColor = GoldenAccent
                     )
                 )
                 
@@ -461,10 +471,12 @@ fun BillingAddressForm(
                     label = { Text("ZIP Code") },
                     modifier = Modifier.weight(1f),
                     singleLine = true,
+                    shape = RoundedCornerShape(12.dp),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = MaterialTheme.colors.primary,
-                        focusedLabelColor = MaterialTheme.colors.primary
+                        focusedBorderColor = GoldenAccent,
+                        focusedLabelColor = GoldenAccent,
+                        cursorColor = GoldenAccent
                     )
                 )
             }
@@ -476,9 +488,11 @@ fun BillingAddressForm(
                 label = { Text("Country") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
+                shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = MaterialTheme.colors.primary,
-                    focusedLabelColor = MaterialTheme.colors.primary
+                    focusedBorderColor = GoldenAccent,
+                    focusedLabelColor = GoldenAccent,
+                    cursorColor = GoldenAccent
                 )
             )
         }
@@ -495,53 +509,55 @@ fun PaymentActionButtons(
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colors.surface)
-            .padding(16.dp)
+            .padding(20.dp)
     ) {
         // Confirm Payment Button
         Button(
             onClick = onConfirmPayment,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp),
-            shape = RoundedCornerShape(12.dp),
+                .height(58.dp),
+            shape = RoundedCornerShape(16.dp),
             colors = ButtonDefaults.buttonColors(
-                backgroundColor = MaterialTheme.colors.primary,
-                contentColor = MaterialTheme.colors.onPrimary
+                backgroundColor = CoffeeBrown,
+                contentColor = CreamyWhite
             ),
             elevation = ButtonDefaults.elevation(
-                defaultElevation = 4.dp,
-                pressedElevation = 8.dp
+                defaultElevation = 8.dp,
+                pressedElevation = 12.dp
             ),
             enabled = !isProcessing
         ) {
             if (isProcessing) {
                 CircularProgressIndicator(
-                    color = MaterialTheme.colors.onPrimary,
-                    modifier = Modifier.size(24.dp)
+                    color = CreamyWhite,
+                    modifier = Modifier.size(26.dp),
+                    strokeWidth = 3.dp
                 )
             } else {
                 Text(
                     text = "Confirm Payment",
                     style = MaterialTheme.typography.button.copy(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 0.5.sp
                     )
                 )
             }
         }
         
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(14.dp))
         
         // Cancel Button
         OutlinedButton(
             onClick = onCancel,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp),
-            shape = RoundedCornerShape(12.dp),
+                .height(58.dp),
+            shape = RoundedCornerShape(16.dp),
             colors = ButtonDefaults.outlinedButtonColors(
                 backgroundColor = Color.Transparent,
-                contentColor = MaterialTheme.colors.primary
+                contentColor = CoffeeBrown
             ),
             border = ButtonDefaults.outlinedBorder.copy(
                 width = 2.dp
@@ -551,8 +567,9 @@ fun PaymentActionButtons(
             Text(
                 text = "Cancel",
                 style = MaterialTheme.typography.button.copy(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 0.5.sp
                 )
             )
         }

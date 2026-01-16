@@ -114,14 +114,14 @@ fun OrderSummaryHeader() {
 fun OrderItemCard(orderItem: OrderItem) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        elevation = 2.dp,
+        shape = RoundedCornerShape(16.dp),
+        elevation = 4.dp,
         backgroundColor = MaterialTheme.colors.surface
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(20.dp)
         ) {
             // Item Name and Quantity
             Row(
@@ -131,7 +131,7 @@ fun OrderItemCard(orderItem: OrderItem) {
             ) {
                 Text(
                     text = orderItem.name,
-                    style = MaterialTheme.typography.h3.copy(
+                    style = MaterialTheme.typography.h4.copy(
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     ),
@@ -140,14 +140,15 @@ fun OrderItemCard(orderItem: OrderItem) {
                 )
                 Text(
                     text = "×${orderItem.quantity}",
-                    style = MaterialTheme.typography.body1.copy(
-                        fontWeight = FontWeight.Bold
+                    style = MaterialTheme.typography.h4.copy(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
                     ),
-                    color = MaterialTheme.colors.primary
+                    color = GoldenAccent
                 )
             }
             
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             
             // Size
             Row(
@@ -155,28 +156,30 @@ fun OrderItemCard(orderItem: OrderItem) {
             ) {
                 Text(
                     text = "Size: ",
-                    style = MaterialTheme.typography.body2.copy(
-                        fontWeight = FontWeight.Bold
+                    style = MaterialTheme.typography.body1.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 14.sp
                     ),
                     color = MaterialTheme.colors.onSurface.copy(alpha = 0.7f)
                 )
                 Text(
                     text = orderItem.size,
-                    style = MaterialTheme.typography.body2,
+                    style = MaterialTheme.typography.body1.copy(fontSize = 14.sp),
                     color = MaterialTheme.colors.onSurface
                 )
             }
             
             // Add-ons
             if (orderItem.addOns.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(6.dp))
                 Row(
                     verticalAlignment = Alignment.Top
                 ) {
                     Text(
                         text = "Add-ons: ",
-                        style = MaterialTheme.typography.body2.copy(
-                            fontWeight = FontWeight.Bold
+                        style = MaterialTheme.typography.body1.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 14.sp
                         ),
                         color = MaterialTheme.colors.onSurface.copy(alpha = 0.7f)
                     )
@@ -184,7 +187,7 @@ fun OrderItemCard(orderItem: OrderItem) {
                         orderItem.addOns.forEach { addOn ->
                             Text(
                                 text = "• $addOn",
-                                style = MaterialTheme.typography.body2,
+                                style = MaterialTheme.typography.body2.copy(fontSize = 14.sp),
                                 color = MaterialTheme.colors.onSurface
                             )
                         }
@@ -192,7 +195,11 @@ fun OrderItemCard(orderItem: OrderItem) {
                 }
             }
             
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(14.dp))
+            
+            Divider(color = MaterialTheme.colors.onSurface.copy(alpha = 0.1f))
+            
+            Spacer(modifier = Modifier.height(14.dp))
             
             // Price
             Row(
@@ -202,16 +209,16 @@ fun OrderItemCard(orderItem: OrderItem) {
             ) {
                 Text(
                     text = "Base Price: $${String.format("%.2f", orderItem.basePrice)}",
-                    style = MaterialTheme.typography.body2,
-                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.7f)
+                    style = MaterialTheme.typography.body2.copy(fontSize = 13.sp),
+                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
                 )
                 Text(
                     text = "$${String.format("%.2f", orderItem.itemTotalPrice)}",
                     style = MaterialTheme.typography.h3.copy(
-                        fontSize = 18.sp,
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     ),
-                    color = MaterialTheme.colors.primary
+                    color = GoldenAccent
                 )
             }
         }
@@ -222,14 +229,14 @@ fun OrderItemCard(orderItem: OrderItem) {
 fun CostBreakdownCard(order: Order) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        elevation = 2.dp,
-        backgroundColor = MaterialTheme.colors.surface
+        shape = RoundedCornerShape(16.dp),
+        elevation = 6.dp,
+        backgroundColor = SoftBeige
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(20.dp)
         ) {
             // Subtotal
             CostBreakdownRow(
@@ -238,7 +245,7 @@ fun CostBreakdownCard(order: Order) {
                 isTotal = false
             )
             
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             
             // Tax
             CostBreakdownRow(
@@ -247,14 +254,14 @@ fun CostBreakdownCard(order: Order) {
                 isTotal = false
             )
             
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             
             Divider(
                 color = MaterialTheme.colors.onSurface.copy(alpha = 0.2f),
-                thickness = 1.dp
+                thickness = 2.dp
             )
             
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             
             // Total
             CostBreakdownRow(
@@ -280,18 +287,18 @@ fun CostBreakdownRow(
         Text(
             text = label,
             style = MaterialTheme.typography.body1.copy(
-                fontSize = if (isTotal) 20.sp else 16.sp,
-                fontWeight = if (isTotal) FontWeight.Bold else FontWeight.Normal
+                fontSize = if (isTotal) 22.sp else 16.sp,
+                fontWeight = if (isTotal) FontWeight.Bold else FontWeight.Medium
             ),
             color = MaterialTheme.colors.onSurface
         )
         Text(
             text = "$${String.format("%.2f", amount)}",
-            style = MaterialTheme.typography.body1.copy(
-                fontSize = if (isTotal) 20.sp else 16.sp,
-                fontWeight = if (isTotal) FontWeight.Bold else FontWeight.Normal
+            style = MaterialTheme.typography.h3.copy(
+                fontSize = if (isTotal) 24.sp else 18.sp,
+                fontWeight = FontWeight.Bold
             ),
-            color = if (isTotal) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface
+            color = if (isTotal) GoldenAccent else MaterialTheme.colors.onSurface
         )
     }
 }
@@ -305,45 +312,46 @@ fun OrderActionButtons(
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colors.surface)
-            .padding(16.dp)
+            .padding(20.dp)
     ) {
         // Proceed to Payment Button (Primary)
         Button(
             onClick = onProceedToPayment,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp),
-            shape = RoundedCornerShape(12.dp),
+                .height(58.dp),
+            shape = RoundedCornerShape(16.dp),
             colors = ButtonDefaults.buttonColors(
-                backgroundColor = MaterialTheme.colors.primary,
-                contentColor = MaterialTheme.colors.onPrimary
+                backgroundColor = CoffeeBrown,
+                contentColor = CreamyWhite
             ),
             elevation = ButtonDefaults.elevation(
-                defaultElevation = 4.dp,
-                pressedElevation = 8.dp
+                defaultElevation = 8.dp,
+                pressedElevation = 12.dp
             )
         ) {
             Text(
                 text = "Proceed to Payment",
                 style = MaterialTheme.typography.button.copy(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 0.5.sp
                 )
             )
         }
         
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(14.dp))
         
         // Edit Order Button (Secondary)
         OutlinedButton(
             onClick = onEditOrder,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp),
-            shape = RoundedCornerShape(12.dp),
+                .height(58.dp),
+            shape = RoundedCornerShape(16.dp),
             colors = ButtonDefaults.outlinedButtonColors(
                 backgroundColor = Color.Transparent,
-                contentColor = MaterialTheme.colors.primary
+                contentColor = CoffeeBrown
             ),
             border = ButtonDefaults.outlinedBorder.copy(
                 width = 2.dp
@@ -352,8 +360,9 @@ fun OrderActionButtons(
             Text(
                 text = "Edit Order",
                 style = MaterialTheme.typography.button.copy(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 0.5.sp
                 )
             )
         }
