@@ -1,6 +1,8 @@
 package coffeeshop.shared.data.repository
 
+import coffeeshop.shared.data.model.AddOn
 import coffeeshop.shared.data.model.Banner
+import coffeeshop.shared.data.model.CustomDrink
 import coffeeshop.shared.data.model.FavoriteDrink
 import coffeeshop.shared.data.model.FeaturedDrink
 import coffeeshop.shared.data.model.MenuCategory
@@ -29,4 +31,8 @@ interface CoffeeRepository {
     fun clearNotification(notificationId: String)
     fun clearAllNotifications()
     fun markNotificationAsRead(notificationId: String)
+    fun getAvailableAddOns(): List<AddOn>
+    fun saveCustomDrink(drink: CustomDrink)
+    fun getSavedCustomDrinks(): List<CustomDrink>
+    fun removeCustomDrink(drinkId: String)
 }

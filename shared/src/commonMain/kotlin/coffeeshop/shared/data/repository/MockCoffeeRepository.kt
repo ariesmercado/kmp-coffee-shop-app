@@ -1,6 +1,8 @@
 package coffeeshop.shared.data.repository
 
+import coffeeshop.shared.data.model.AddOn
 import coffeeshop.shared.data.model.Banner
+import coffeeshop.shared.data.model.CustomDrink
 import coffeeshop.shared.data.model.FavoriteDrink
 import coffeeshop.shared.data.model.FeaturedDrink
 import coffeeshop.shared.data.model.MenuCategory
@@ -20,6 +22,7 @@ class MockCoffeeRepository : CoffeeRepository {
     private var rewardPointsBalance = 325 // Starting with some points for demo
     private val rewardTransactions = mutableListOf<RewardTransaction>()
     private val notifications = mutableListOf<Notification>()
+    private val customDrinks = mutableListOf<CustomDrink>()
     
     companion object {
         private const val HOUR_IN_MILLIS = 60 * 60 * 1000L
@@ -742,5 +745,34 @@ class MockCoffeeRepository : CoffeeRepository {
         if (index != -1) {
             notifications[index] = notifications[index].copy(isRead = true)
         }
+    }
+    
+    override fun getAvailableAddOns(): List<AddOn> {
+        return listOf(
+            AddOn(id = "addon_1", name = "Extra Shot", price = 0.75),
+            AddOn(id = "addon_2", name = "Whipped Cream", price = 0.50),
+            AddOn(id = "addon_3", name = "Almond Milk", price = 0.50),
+            AddOn(id = "addon_4", name = "Oat Milk", price = 0.50),
+            AddOn(id = "addon_5", name = "Soy Milk", price = 0.50),
+            AddOn(id = "addon_6", name = "Extra Caramel", price = 0.50),
+            AddOn(id = "addon_7", name = "Vanilla Syrup", price = 0.50),
+            AddOn(id = "addon_8", name = "Hazelnut Syrup", price = 0.50),
+            AddOn(id = "addon_9", name = "Chocolate Drizzle", price = 0.50),
+            AddOn(id = "addon_10", name = "Cinnamon", price = 0.25)
+        )
+    }
+    
+    override fun saveCustomDrink(drink: CustomDrink) {
+        // Upsert: Remove existing drink with same id if it exists, then add the new one
+        customDrinks.removeAll { it.id == drink.id }
+        customDrinks.add(drink)
+    }
+    
+    override fun getSavedCustomDrinks(): List<CustomDrink> {
+        return customDrinks.toList()
+    }
+    
+    override fun removeCustomDrink(drinkId: String) {
+        customDrinks.removeAll { it.id == drinkId }
     }
 }
