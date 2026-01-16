@@ -17,11 +17,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import coffeeshop.app.ui.theme.*
 import coffeeshop.shared.data.model.Order
 import coffeeshop.shared.data.model.PaymentMethod
+import coffeeshop.shared.data.model.PaymentStatus
 import coffeeshop.shared.presentation.OrderSummaryPresenter
 import coffeeshop.shared.presentation.PaymentPresenter
+import kotlinx.coroutines.launch
+
+private const val SUCCESS_DELAY_MS = 2000L
 
 @Composable
 fun PaymentScreen(
@@ -50,6 +55,15 @@ fun PaymentScreen(
     
     // Processing state
     var isProcessing by remember { mutableStateOf(false) }
+    
+    // Payment result dialog state
+    var showPaymentResultDialog by remember { mutableStateOf(false) }
+    var paymentResultSuccess by remember { mutableStateOf(false) }
+    var paymentResultMessage by remember { mutableStateOf("") }
+    var paymentTransactionId by remember { mutableStateOf("") }
+    
+    // Coroutine scope for async operations
+    val coroutineScope = rememberCoroutineScope()
     
     Column(
         modifier = Modifier
@@ -168,12 +182,30 @@ fun PaymentScreen(
                         totalAmount = order.total
                     )
                     
-                    // Process payment
-                    val success = paymentPresenter.processPayment(paymentInfo)
-                    isProcessing = false
-                    
-                    if (success) {
-                        onPaymentSuccess()
+                    // Process payment asynchronously
+                    coroutineScope.launch {
+                        try {
+                            val result = paymentPresenter.processPayment(paymentInfo)
+                            isProcessing = false
+                            
+                            // Show result dialog
+                            paymentResultSuccess = result.status == PaymentStatus.SUCCESS
+                            paymentResultMessage = result.message
+                            paymentTransactionId = result.transactionId
+                            showPaymentResultDialog = true
+                            
+                            // Call success callback after short delay
+                            if (paymentResultSuccess) {
+                                kotlinx.coroutines.delay(SUCCESS_DELAY_MS)
+                                onPaymentSuccess()
+                            }
+                        } catch (e: Exception) {
+                            isProcessing = false
+                            paymentResultSuccess = false
+                            paymentResultMessage = "Payment failed: ${e.message}"
+                            paymentTransactionId = ""
+                            showPaymentResultDialog = true
+                        }
                     }
                 } else {
                     errorMessage = validationResult.errorMessage
@@ -182,6 +214,21 @@ fun PaymentScreen(
             },
             onCancel = onCancel,
             isProcessing = isProcessing
+        )
+    }
+    
+    // Payment Result Dialog
+    if (showPaymentResultDialog) {
+        PaymentResultDialog(
+            isSuccess = paymentResultSuccess,
+            message = paymentResultMessage,
+            transactionId = paymentTransactionId,
+            onDismiss = { 
+                showPaymentResultDialog = false
+                if (paymentResultSuccess) {
+                    onPaymentSuccess()
+                }
+            }
         )
     }
 }
@@ -508,6 +555,122 @@ fun PaymentActionButtons(
                     fontWeight = FontWeight.Bold
                 )
             )
+        }
+    }
+}
+
+@Composable
+fun PaymentResultDialog(
+    isSuccess: Boolean,
+    message: String,
+    transactionId: String,
+    onDismiss: () -> Unit
+) {
+    Dialog(onDismissRequest = onDismiss) {
+        Card(
+            shape = RoundedCornerShape(16.dp),
+            elevation = 8.dp,
+            backgroundColor = MaterialTheme.colors.surface
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(24.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // Icon
+                Box(
+                    modifier = Modifier
+                        .size(64.dp)
+                        .background(
+                            color = if (isSuccess) 
+                                Color(0xFF4CAF50).copy(alpha = 0.2f)
+                            else 
+                                Color(0xFFF44336).copy(alpha = 0.2f),
+                            shape = RoundedCornerShape(32.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = if (isSuccess) "✓" else "✗",
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = if (isSuccess) Color(0xFF4CAF50) else Color(0xFFF44336)
+                    )
+                }
+                
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                // Title
+                Text(
+                    text = if (isSuccess) "Payment Successful!" else "Payment Failed",
+                    style = MaterialTheme.typography.h2.copy(
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    color = MaterialTheme.colors.onSurface
+                )
+                
+                Spacer(modifier = Modifier.height(8.dp))
+                
+                // Message
+                Text(
+                    text = message,
+                    style = MaterialTheme.typography.body1,
+                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.7f)
+                )
+                
+                if (isSuccess && transactionId.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    
+                    // Transaction ID
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = MaterialTheme.colors.primary.copy(alpha = 0.1f),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .padding(12.dp)
+                    ) {
+                        Text(
+                            text = "Transaction ID",
+                            style = MaterialTheme.typography.caption,
+                            color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
+                        )
+                        Text(
+                            text = transactionId,
+                            style = MaterialTheme.typography.body2.copy(
+                                fontWeight = FontWeight.Medium
+                            ),
+                            color = MaterialTheme.colors.onSurface
+                        )
+                    }
+                }
+                
+                Spacer(modifier = Modifier.height(24.dp))
+                
+                // OK Button
+                Button(
+                    onClick = onDismiss,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
+                    shape = RoundedCornerShape(24.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = MaterialTheme.colors.primary
+                    )
+                ) {
+                    Text(
+                        text = "OK",
+                        style = MaterialTheme.typography.button.copy(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        color = MaterialTheme.colors.onPrimary
+                    )
+                }
+            }
         }
     }
 }

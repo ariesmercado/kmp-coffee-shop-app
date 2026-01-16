@@ -82,6 +82,16 @@ struct PaymentScreenView: View {
         }
         .background(CoffeeColors.creamyWhite)
         .ignoresSafeArea(edges: .top)
+        .alert(isPresented: $viewModel.showPaymentResultAlert) {
+            Alert(
+                title: Text(viewModel.paymentResultSuccess ? "Payment Successful!" : "Payment Failed"),
+                message: Text(viewModel.paymentResultMessage + 
+                    (viewModel.paymentResultSuccess && !viewModel.paymentTransactionId.isEmpty 
+                        ? "\n\nTransaction ID: \(viewModel.paymentTransactionId)" 
+                        : "")),
+                dismissButton: .default(Text("OK"))
+            )
+        }
     }
 }
 
@@ -334,6 +344,11 @@ class PaymentViewModel: ObservableObject {
     @Published var showError: Bool = false
     @Published var isProcessing: Bool = false
     
+    @Published var showPaymentResultAlert: Bool = false
+    @Published var paymentResultSuccess: Bool = false
+    @Published var paymentResultMessage: String = ""
+    @Published var paymentTransactionId: String = ""
+    
     private let orderSummaryPresenter: OrderSummaryPresenter
     private let paymentPresenter: PaymentPresenter
     
@@ -373,13 +388,27 @@ class PaymentViewModel: ObservableObject {
                 totalAmount: order.total
             )
             
-            // Process payment
-            let success = paymentPresenter.processPayment(paymentInfo: paymentInfo)
-            isProcessing = false
-            
-            if success {
-                print("Payment successful!")
-                // Navigate to success screen or show success message
+            // Process payment asynchronously
+            Task {
+                do {
+                    let result = try await paymentPresenter.processPayment(paymentInfo: paymentInfo)
+                    
+                    await MainActor.run {
+                        isProcessing = false
+                        paymentResultSuccess = result.status == PaymentStatus.success
+                        paymentResultMessage = result.message
+                        paymentTransactionId = result.transactionId
+                        showPaymentResultAlert = true
+                    }
+                } catch {
+                    await MainActor.run {
+                        isProcessing = false
+                        paymentResultSuccess = false
+                        paymentResultMessage = "Payment failed: \(error.localizedDescription)"
+                        paymentTransactionId = ""
+                        showPaymentResultAlert = true
+                    }
+                }
             }
         } else {
             errorMessage = validationResult.errorMessage
