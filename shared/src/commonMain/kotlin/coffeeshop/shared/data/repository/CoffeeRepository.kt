@@ -22,6 +22,7 @@ interface CoffeeRepository {
     fun removeFavoriteDrink(drinkId: String)
     fun isFavorite(drinkId: String): Boolean
     fun getRewardPointsBalance(): Int
+    fun getTotalPointsEarned(): Int
     fun getRewardTransactions(): List<RewardTransaction>
     fun addRewardPoints(points: Int, description: String)
     fun redeemRewardPoints(points: Int, description: String): Boolean

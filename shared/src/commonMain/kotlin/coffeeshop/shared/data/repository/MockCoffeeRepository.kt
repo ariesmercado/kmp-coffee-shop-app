@@ -18,6 +18,7 @@ class MockCoffeeRepository : CoffeeRepository {
     private val favoriteDrinks = mutableListOf<FavoriteDrink>()
     private val favoriteIds = mutableSetOf<String>()
     private var rewardPointsBalance = 325 // Starting with some points for demo
+    private var totalPointsEarned = 1850 // Total accumulated to demonstrate Gold tier
     private val rewardTransactions = mutableListOf<RewardTransaction>()
     private val notifications = mutableListOf<Notification>()
     
@@ -152,7 +153,7 @@ class MockCoffeeRepository : CoffeeRepository {
     }
     
     override fun getCurrentUser(): User {
-        return User(name = "Coffee Lover", id = "user_001", rewardPoints = rewardPointsBalance)
+        return User(name = "Coffee Lover", id = "user_001", rewardPoints = rewardPointsBalance, totalPointsEarned = totalPointsEarned)
     }
 
     override fun getBanners(): List<Banner> {
@@ -691,12 +692,17 @@ class MockCoffeeRepository : CoffeeRepository {
         return rewardPointsBalance
     }
     
+    override fun getTotalPointsEarned(): Int {
+        return totalPointsEarned
+    }
+    
     override fun getRewardTransactions(): List<RewardTransaction> {
         return rewardTransactions.sortedByDescending { it.timestamp }
     }
     
     override fun addRewardPoints(points: Int, description: String) {
         rewardPointsBalance += points
+        totalPointsEarned += points
         rewardTransactions.add(
             RewardTransaction(
                 id = "reward_${System.currentTimeMillis()}",
