@@ -28,6 +28,8 @@ import coffeeshop.shared.presentation.CustomDrinkBuilderPresenter
 fun CustomDrinkBuilderScreen(
     presenter: CustomDrinkBuilderPresenter = remember { CustomDrinkBuilderPresenter(MockCoffeeRepository()) }
 ) {
+    val drinkSizes = remember { DrinkSize.values().toList() }
+    
     var currentStep by remember { mutableStateOf(1) }
     var selectedMenuItem by remember { mutableStateOf<MenuItem?>(null) }
     var selectedSize by remember { mutableStateOf(DrinkSize.MEDIUM) }
@@ -93,7 +95,7 @@ fun CustomDrinkBuilderScreen(
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                     }
-                    items(DrinkSize.values()) { size ->
+                    items(drinkSizes) { size ->
                         SizeSelectionCard(
                             size = size,
                             basePrice = selectedMenuItem?.price ?: 0.0,

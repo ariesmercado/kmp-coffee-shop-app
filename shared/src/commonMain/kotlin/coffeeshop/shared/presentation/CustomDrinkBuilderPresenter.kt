@@ -29,6 +29,8 @@ class CustomDrinkBuilderPresenter(private val repository: CoffeeRepository) {
         customName: String? = null
     ): CustomDrink {
         val totalPrice = calculateTotalPrice(baseMenuItem, size, addOns)
+        // Note: ID generation uses timestamp + random suffix for uniqueness
+        // For production, consider using UUID library for guaranteed uniqueness
         val drink = CustomDrink(
             id = "custom_${System.currentTimeMillis()}_${(0..999).random()}",
             baseMenuItem = baseMenuItem,
