@@ -1,15 +1,25 @@
 package coffeeshop.shared.presentation
 
+import coffeeshop.shared.data.gateway.MockPaymentGateway
+import coffeeshop.shared.data.gateway.PaymentGateway
 import coffeeshop.shared.data.model.BillingAddress
 import coffeeshop.shared.data.model.PaymentInfo
 import coffeeshop.shared.data.model.PaymentMethod
+import coffeeshop.shared.data.model.PaymentReceipt
+import coffeeshop.shared.data.model.PaymentResult
+import coffeeshop.shared.data.model.PaymentTransaction
+import coffeeshop.shared.data.model.SavedPaymentMethod
+import coffeeshop.shared.data.repository.PaymentMethodsRepository
 
 data class ValidationResult(
     val isValid: Boolean,
     val errorMessage: String = ""
 )
 
-class PaymentPresenter {
+class PaymentPresenter(
+    private val paymentGateway: PaymentGateway = MockPaymentGateway(),
+    private val paymentMethodsRepository: PaymentMethodsRepository = PaymentMethodsRepository()
+) {
     
     /**
      * Validates billing address fields
@@ -89,13 +99,11 @@ class PaymentPresenter {
     }
     
     /**
-     * Simulates payment processing
-     * In a real app, this would integrate with a payment gateway
+     * Process payment through payment gateway
+     * @return PaymentResult with transaction status
      */
-    fun processPayment(paymentInfo: PaymentInfo): Boolean {
-        // Simulate payment processing
-        // In a real app, this would call a backend API or payment gateway
-        return true
+    suspend fun processPayment(paymentInfo: PaymentInfo): PaymentResult {
+        return paymentGateway.processPayment(paymentInfo)
     }
     
     /**
@@ -109,5 +117,71 @@ class PaymentPresenter {
             PaymentMethod.APPLE_PAY,
             PaymentMethod.GOOGLE_PAY
         )
+    }
+    
+    /**
+     * Get saved payment methods
+     */
+    fun getSavedPaymentMethods(): List<SavedPaymentMethod> {
+        return paymentMethodsRepository.getSavedPaymentMethods()
+    }
+    
+    /**
+     * Save a payment method for future use
+     */
+    fun savePaymentMethod(
+        paymentMethod: PaymentMethod,
+        displayName: String,
+        lastFourDigits: String? = null,
+        billingAddress: BillingAddress? = null,
+        setAsDefault: Boolean = false
+    ) {
+        val savedMethod = SavedPaymentMethod(
+            id = generatePaymentMethodId(),
+            paymentMethod = paymentMethod,
+            displayName = displayName,
+            lastFourDigits = lastFourDigits,
+            isDefault = setAsDefault,
+            billingAddress = billingAddress
+        )
+        paymentMethodsRepository.savePaymentMethod(savedMethod)
+    }
+    
+    /**
+     * Remove a saved payment method
+     */
+    fun removeSavedPaymentMethod(methodId: String) {
+        paymentMethodsRepository.removePaymentMethod(methodId)
+    }
+    
+    /**
+     * Generate a payment receipt
+     */
+    fun generateReceipt(
+        transactionId: String,
+        orderId: String,
+        orderItems: List<coffeeshop.shared.data.model.OrderItem>,
+        subtotal: Double,
+        tax: Double,
+        total: Double,
+        paymentMethod: PaymentMethod,
+        billingAddress: BillingAddress
+    ): PaymentReceipt {
+        return PaymentReceipt(
+            receiptId = "RCP_${System.currentTimeMillis()}",
+            transactionId = transactionId,
+            orderId = orderId,
+            orderItems = orderItems,
+            subtotal = subtotal,
+            tax = tax,
+            total = total,
+            paymentMethod = paymentMethod,
+            timestamp = System.currentTimeMillis(),
+            billingAddress = billingAddress
+        )
+    }
+    
+    private fun generatePaymentMethodId(): String {
+        return "PM_${System.currentTimeMillis()}"
     }
 }
