@@ -4,6 +4,7 @@ import shared
 struct ProfileScreenView: View {
     @StateObject private var viewModel = ProfileViewModel()
     @State private var showRewardInfo = false
+    @State private var showBarcodeScanner = false
     
     var body: some View {
         ScrollView {
@@ -18,10 +19,14 @@ struct ProfileScreenView: View {
                 RewardPointsCard(
                     points: viewModel.rewardPoints,
                     pointsToNextTier: viewModel.pointsToNextTier,
-                    canRedeem: viewModel.canRedeem
-                ) {
-                    showRewardInfo = true
-                }
+                    canRedeem: viewModel.canRedeem,
+                    onRewardInfoClick: {
+                        showRewardInfo = true
+                    },
+                    onScanBarcodeClick: {
+                        showBarcodeScanner = true
+                    }
+                )
                 .padding(16)
                 
                 VStack(alignment: .leading, spacing: 8) {
@@ -41,6 +46,16 @@ struct ProfileScreenView: View {
         .background(CoffeeColors.creamyWhite)
         .sheet(isPresented: $showRewardInfo) {
             RewardInfoScreenView()
+        }
+        .sheet(isPresented: $showBarcodeScanner) {
+            NavigationView {
+                BarcodeScannerView(onScanComplete: { success, points in
+                    // Refresh view model when scan completes successfully
+                    if success {
+                        viewModel.loadData()
+                    }
+                })
+            }
         }
     }
 }
@@ -69,6 +84,7 @@ struct RewardPointsCard: View {
     let pointsToNextTier: Int
     let canRedeem: Bool
     let onRewardInfoClick: () -> Void
+    let onScanBarcodeClick: () -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -106,6 +122,17 @@ struct RewardPointsCard: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(Color.white.opacity(0.2))
                 .cornerRadius(8)
+            }
+            
+            // Scan Barcode button (full width)
+            Button(action: onScanBarcodeClick) {
+                Text("📱 Scan Receipt Barcode")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(CoffeeColors.caramelBrown)
+                    .cornerRadius(8)
             }
             
             HStack(spacing: 8) {
@@ -207,7 +234,7 @@ class ProfileViewModel: ObservableObject {
         loadData()
     }
     
-    private func loadData() {
+    func loadData() {
         let user = presenter.getCurrentUser()
         userName = user.name
         rewardPoints = Int(presenter.getRewardPointsBalance())
