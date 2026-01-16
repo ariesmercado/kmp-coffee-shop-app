@@ -393,7 +393,6 @@ fun BillingAddressForm(
                 label = { Text("Full Name") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
-                shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = GoldenAccent,
                     focusedLabelColor = GoldenAccent,
@@ -408,7 +407,6 @@ fun BillingAddressForm(
                 label = { Text("Address Line 1") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
-                shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = GoldenAccent,
                     focusedLabelColor = GoldenAccent,
@@ -423,7 +421,6 @@ fun BillingAddressForm(
                 label = { Text("Address Line 2 (Optional)") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
-                shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = GoldenAccent,
                     focusedLabelColor = GoldenAccent,
@@ -438,7 +435,6 @@ fun BillingAddressForm(
                 label = { Text("City") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
-                shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = GoldenAccent,
                     focusedLabelColor = GoldenAccent,
@@ -457,7 +453,6 @@ fun BillingAddressForm(
                     label = { Text("State") },
                     modifier = Modifier.weight(1f),
                     singleLine = true,
-                    shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedBorderColor = GoldenAccent,
                         focusedLabelColor = GoldenAccent,
@@ -471,7 +466,6 @@ fun BillingAddressForm(
                     label = { Text("ZIP Code") },
                     modifier = Modifier.weight(1f),
                     singleLine = true,
-                    shape = RoundedCornerShape(12.dp),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedBorderColor = GoldenAccent,
@@ -488,7 +482,6 @@ fun BillingAddressForm(
                 label = { Text("Country") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
-                shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = GoldenAccent,
                     focusedLabelColor = GoldenAccent,

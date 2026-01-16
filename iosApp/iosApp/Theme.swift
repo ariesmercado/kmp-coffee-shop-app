@@ -5,7 +5,7 @@ struct CoffeeColors {
     // Primary Browns - Rich Coffee Tones
     static let coffeeBrown = Color(red: 0.435, green: 0.306, blue: 0.216)       // #6F4E37
     static let lightCoffee = Color(red: 0.627, green: 0.322, blue: 0.176)       // #A0522D
-    static let darkCoffee = Color(red: 0.243, green: 0.149, blue: 0.137)        // #3E2723
+    static let darkCoffee = Color(red: 0.243, green: 0.153, blue: 0.137)        // #3E2723
     static let espressoBlack = Color(red: 0.106, green: 0.059, blue: 0.039)     // #1B0F0A
     
     // Neutrals - Creamy and Soft
