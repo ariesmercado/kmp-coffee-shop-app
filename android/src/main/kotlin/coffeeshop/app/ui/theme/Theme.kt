@@ -10,27 +10,29 @@ import androidx.compose.ui.graphics.Color
 private val LightColorPalette = lightColors(
     primary = CoffeeBrown,
     primaryVariant = DarkCoffee,
-    secondary = CaramelBrown,
-    secondaryVariant = MochaBrown,
-    background = CreamyWhite,
-    surface = LatteFoam,
-    onPrimary = Color.White,
-    onSecondary = Color.White,
+    secondary = GoldenAccent,
+    secondaryVariant = CaramelBrown,
+    background = SoftBeige,
+    surface = WarmIvory,
+    onPrimary = CreamyWhite,
+    onSecondary = DarkCoffee,
     onBackground = DarkCoffee,
-    onSurface = DarkCoffee
+    onSurface = DarkCoffee,
+    error = Color(0xFFB00020)
 )
 
 private val DarkColorPalette = darkColors(
-    primary = LightCoffee,
+    primary = CinnamonBrown,
     primaryVariant = CoffeeBrown,
-    secondary = CaramelBrown,
-    secondaryVariant = MochaBrown,
+    secondary = GoldenAccent,
+    secondaryVariant = CaramelBrown,
     background = EspressoBlack,
-    surface = DarkCoffee,
+    surface = ChocolateBrown,
     onPrimary = CreamyWhite,
-    onSecondary = CreamyWhite,
+    onSecondary = DarkCoffee,
     onBackground = CreamyWhite,
-    onSurface = CreamyWhite
+    onSurface = CreamyWhite,
+    error = Color(0xFFCF6679)
 )
 
 @Composable
