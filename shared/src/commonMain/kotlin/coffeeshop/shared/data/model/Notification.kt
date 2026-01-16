@@ -15,5 +15,6 @@ enum class NotificationType {
     ORDER_ACCEPTED,
     ORDER_SHIPPED,
     ORDER_DELIVERED,
+    TIER_UPGRADE,
     GENERAL
 }

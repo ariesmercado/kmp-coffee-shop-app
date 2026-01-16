@@ -269,6 +269,11 @@ fun NotificationTypeBadge(type: NotificationType) {
             Color(0xFF2E7D32),
             "Delivered"
         )
+        NotificationType.TIER_UPGRADE -> Triple(
+            Color(0xFFFFD700).copy(alpha = 0.2f),
+            Color(0xFFB8860B),
+            "Tier Upgrade"
+        )
         NotificationType.GENERAL -> Triple(
             Color(0xFF607D8B).copy(alpha = 0.2f),
             Color(0xFF37474F),
